@@ -7,7 +7,6 @@ class Scene2 extends Phaser.Scene {
         this.background = this.add.sprite(config.width / 2,config.height / 2,"background").setScale(4);
         this.background.play("BC", true);
 
-        this.bullet = this.add.image(config.width / 2,config.height / 2, "bullet").setScale(0);
         this.aura = this.physics.add.image(config.width / 2,config.height / 2, "aura").setScale(4).setBlendMode(Phaser.BlendModes.ADD);
         this.spaceship = this.physics.add.image(config.width / 2,config.height / 2, "spaceship").setScale(4);
 
@@ -58,12 +57,28 @@ class Scene2 extends Phaser.Scene {
 
     createBullet(angle) {
         if (this.mouse.isDown != true){
+            var fireSpeedLocal = gameSettings.fireSpeed
             if (this.spaceship.lastFired > gameSettings.fireRate)
             {
+                if (this.cursors.shift.isDown) {
+                    fireSpeedLocal = gameSettings.fireSpeed;
+                }
+                else {
+                    fireSpeedLocal = gameSettings.fireSpeed * 1.25;
+                }
+
                 this.spaceship.lastFired = 0;
                 this.bullet = this.physics.add.sprite(this.spaceship.x,this.spaceship.y,"bullet").setScale(4).setBlendMode(Phaser.BlendModes.ADD);
-                this.physics.moveTo(this.bullet,this.mouse.x,this.mouse.y,gameSettings.fireSpeed);
+                this.physics.moveTo(this.bullet,this.mouse.x,this.mouse.y,fireSpeedLocal);
                 this.bullet.setRotation(angle + Math.PI/2);
+
+                this.bullet.setCollideWorldBounds(true);
+                this.bullet.body.onWorldBounds = true;
+                this.bullet.body.world.on('worldbounds', function(body) {
+                    if (body.gameObject === this) {
+                        this.destroy();
+                    }
+                }, this.bullet);
             }
         }
     }
