@@ -17,12 +17,25 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 1,
             frameHeight: 1
         });
+        this.load.spritesheet("FoR", "assets/Images/SpriteSheets/FieldOfReturn.png", {
+            frameWidth: 247,
+            frameHeight: 157
+        });
         this.load.image("sCover", "assets/Images/Sprites/screenCover.png");
         this.load.image("sCover2", "assets/Images/Sprites/screenCover2.png");
         this.load.image("mCover", "assets/Images/Sprites/multiplyCover.png");
         this.load.image("spaceship", "assets/Images/Sprites/shipSmall.png");
         this.load.image("aura", "assets/Images/Sprites/spaceshipAura.png");
         this.load.image("bullet", "assets/Images/Sprites/bullet.png");
+        this.load.image("ASTbig", "assets/Images/Sprites/ASTbig.png");
+        this.load.spritesheet("ASTmedium", "assets/Images/SpriteSheets/ASTmedium.png", {
+            frameWidth: 20,
+            frameHeight: 20
+        });
+        this.load.spritesheet("ASTsmall", "assets/Images/SpriteSheets/ASTsmall.png", {
+            frameWidth: 10,
+            frameHeight: 10
+        });
     }
 
     create() {
@@ -57,6 +70,51 @@ class SCNbootGame extends Phaser.Scene {
             key: "fadeout",
             frames: this.anims.generateFrameNumbers("fadeout"),
             frameRate: 12,
+        });
+
+        this.anims.create({
+            key: "FoR",
+            frames: this.anims.generateFrameNumbers("FoR"),
+            frameRate: 6,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: "medium1",
+            frames: this.anims.generateFrameNumbers("ASTmedium", { start: 0, end: 0 }),
+            frameRate: 0,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "medium2",
+            frames: this.anims.generateFrameNumbers("ASTmedium", { start: 1, end: 1 }),
+            frameRate: 0,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "medium3",
+            frames: this.anims.generateFrameNumbers("ASTmedium", { start: 2, end: 2 }),
+            frameRate: 0,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "medium4",
+            frames: this.anims.generateFrameNumbers("ASTmedium", { start: 3, end: 3 }),
+            frameRate: 0,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: "small1",
+            frames: this.anims.generateFrameNumbers("ASTsmall", { start: 0, end: 0 }),
+            frameRate: 0,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "small2",
+            frames: this.anims.generateFrameNumbers("ASTsmall", { start: 1, end: 1 }),
+            frameRate: 0,
+            repeat: -1
         });
 
         this.scene.start("startTestLevel");
