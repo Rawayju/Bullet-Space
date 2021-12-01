@@ -32,6 +32,7 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.ewe2 = 0;
         gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
         this.dif = 0;
+        this.speedTick = 0;
         this.spawnRate1 = 150;
         this.spawnRate2 = 500;
     }
@@ -264,14 +265,30 @@ class SCNplayTestLevel extends Phaser.Scene {
 
     difficulty() {
         this.dif += 1;
-        if (this.dif > gameSettings.levelDifficulty) {
+        this.speedTick += 1;
+        if (gameSettings.handicap > 2 && this.dif > gameSettings.levelDifficulty) {
             if (gameSettings.levelDifficulty > 50) {
                 gameSettings.handicap -= 2;
+                this.dif = 0;
             } else {
                 gameSettings.handicap -= 1;
+                this.dif = 0;
             }
+        }
 
-            this.dif = 0;
+        if (gameSettings.asteroidSpawnRate > 2 && this.dif > gameSettings.levelDifficulty) {
+            if (gameSettings.levelDifficulty > 50) {
+                gameSettings.asteroidSpawnRate -= 2;
+                this.dif = 0;
+            } else {
+                gameSettings.asteroidSpawnRate -= 1;
+                this.dif = 0;
+            }
+        }
+
+        if (this.speedTick > gameSettings.levelDifficulty * 4) {
+            gameSettings.asteroidSpeedBoost += 1;
+            this.speedTick = 0;
         }
     }
 }
