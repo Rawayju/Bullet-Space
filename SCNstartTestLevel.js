@@ -83,7 +83,7 @@ class SCNstartTestLevel extends Phaser.Scene {
 `;
 
         var content3 = `
-[shadow] First day at job?[r][wait=600]
+[shadow] First day at work?[r][wait=600]
  I'll outdo myself[r] even more today![/shadow]
 `;
 
