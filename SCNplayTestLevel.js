@@ -47,7 +47,6 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.spaceship.lastSpawnedBig += Phaser.Math.Between(0.50, 1.75);
         this.spaceship.lastSpawnedMedium += Phaser.Math.Between(0.50, 1.75);
         this.spaceship.lastSpawnedSmall += Phaser.Math.Between(0.50, 1.75);
-        this.createAsteroids();
 
         this.spaceship.lastFired += 1;
         this.createBullet(angle);
@@ -83,8 +82,15 @@ class SCNplayTestLevel extends Phaser.Scene {
 
     createBullet(angle) {
         if (this.mouse.isDown != true) {
-            var fireSpeedLocal = gameSettings.fireSpeed
-            if (this.spaceship.lastFired > gameSettings.fireRate)
+            var fireRateLocal = gameSettings.fireRate;
+            if (this.cursors.shift.isDown) {
+                fireRateLocal = gameSettings.fireRate - 0.45;
+            }
+            else {
+                fireRateLocal = gameSettings.fireRate;
+            }
+            var fireSpeedLocal = gameSettings.fireSpeed;
+            if (this.spaceship.lastFired > fireRateLocal)
             {
                 if (this.cursors.shift.isDown) {
                     fireSpeedLocal = gameSettings.fireSpeed;
@@ -107,6 +113,8 @@ class SCNplayTestLevel extends Phaser.Scene {
                 }, this.bullet);
             }
         }
+        this.physics.add.collider(this.asteroids, this.bullet);
+        this.createAsteroids();
     }
 
     createAsteroids() {
@@ -147,6 +155,7 @@ class SCNplayTestLevel extends Phaser.Scene {
     createBig() {
         
         var big = this.physics.add.image(16, 16, "ASTbig");
+        big.health = 20;
         this.asteroids.add(big);
         if (Math.random() > 0.5) {
             if (Math.random() > 0.5) {
