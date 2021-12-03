@@ -1,7 +1,6 @@
 var gameSettings = {
     shipSpeed: 0.475,
     shiftControl: 0.1,
-    shift: 0.1,
     fireRate: 1.5,
     fireSpeed: 500,
     asteroidSpawnRate: 300, // Line 12 comment
