@@ -10,8 +10,10 @@ class SCNstartTestLevel extends Phaser.Scene {
     create() {
         this.mouse = this.input.mousePointer;
 
-        this.background = this.add.sprite(config.width / 2,config.height / 2,"background");
+        this.background = this.add.sprite(config.width / 2,config.height / 2,"background").setRotation(Math.PI);
         this.background.play("BC", true);
+        this.background1 = this.add.sprite(config.width / 2,config.height / 2 - config.height,"background");
+        this.background1.play("BC", true);
 
         this.screenCover = this.add.image(config.width / 2,config.height / 2,"sCover").setBlendMode(Phaser.BlendModes.SCREEN);
         this.screenCover2 = this.add.image(config.width / 2,config.height / 2 - config.height,"sCover2").setBlendMode;
