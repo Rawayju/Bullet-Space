@@ -25,7 +25,14 @@ class SCNplayTestLevel extends Phaser.Scene {
 
         this.asteroids = this.physics.add.group();
 
-
+        // Bullets group
+        this.bullets = this.add.group();
+        this.bullet = 0;
+        // Add collisions
+        this.physics.add.collider(this.asteroids, this.bullets, function(asteroid, bullet) {
+            bullet.destroy();
+            asteroid.destroy();
+        });
 
         this.spaceship.lastSpawnedBig = 0;
         this.spaceship.lastSpawnedMedium = 0;
@@ -37,14 +44,19 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.speedTick = 0;
         this.spawnRate1 = 150;
         this.spawnRate2 = 500;
+
+        this.fireRateLocal = gameSettings.fireRate;
+        this.fireSpeedLocal = gameSettings.fireSpeed;
+        this.a = 0;
     }
 
     update() {
 
-        gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
         var angle = Phaser.Math.Angle.Between(this.spaceship.x,this.spaceship.y,this.mouse.x,this.mouse.y);
-        this.spaceship.setRotation(angle + Math.PI/2);
-        this.aura.setRotation(angle + Math.PI/2);
+        this.a = angle + Math.PI/2;
+        gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
+        this.spaceship.setRotation(this.a);
+        this.aura.setRotation(this.a);
 
         this.moveShip();
     
@@ -53,7 +65,36 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.spaceship.lastSpawnedSmall += Phaser.Math.Between(0.50, 1.75);
 
         this.spaceship.lastFired += 1;
-        this.createBullet(angle);
+
+        // Create bullet
+        if (this.mouse.isDown != true) {
+            if (this.cursors.shift.isDown) {
+                this.fireRateLocal = gameSettings.fireRate * 1.45;
+            } else {
+                this.fireRateLocal = gameSettings.fireRate;
+            }
+            
+            if (this.spaceship.lastFired > this.fireRateLocal) {
+                if (this.cursors.shift.isDown) {
+                    this.fireSpeedLocal = gameSettings.fireSpeed;
+                } else {
+                    this.fireSpeedLocal = gameSettings.fireSpeed * 1.25;
+                }
+                if (this.bullets.getChildren().length < 30) {
+                    this.createBullet();
+                }
+            }
+        }
+        
+        for (var i = 0; i < this.bullets.getChildren().length; i++) {
+            var bulletHolder = this.bullets.getChildren()[i];
+            bulletHolder.setBlendMode(Phaser.BlendModes.ADD);
+            
+            this.bullet = bulletHolder;
+        }
+        
+        // Manage asteroids
+        this.createAsteroids();
         this.difficulty();
     }
 
@@ -84,44 +125,21 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.aura.y = this.spaceship.y;
     }
 
-    createBullet(angle) {
-        if (this.mouse.isDown != true) {
-            var fireRateLocal = gameSettings.fireRate;
-            if (this.cursors.shift.isDown) {
-                fireRateLocal = gameSettings.fireRate - 0.45;
-            }
-            else {
-                fireRateLocal = gameSettings.fireRate;
-            }
-            var fireSpeedLocal = gameSettings.fireSpeed;
-            if (this.spaceship.lastFired > fireRateLocal)
-            {
-                if (this.cursors.shift.isDown) {
-                    fireSpeedLocal = gameSettings.fireSpeed;
-                }
-                else {
-                    fireSpeedLocal = gameSettings.fireSpeed * 1.25;
-                }
+    createBullet() {
+        var beam = new CreateBullet(this);
+    }
 
-                this.spaceship.lastFired = 0;
-                this.bullet = this.physics.add.sprite(this.spaceship.x,this.spaceship.y,"bullet").setBlendMode(Phaser.BlendModes.ADD);
-                this.physics.moveTo(this.bullet,this.mouse.x,this.mouse.y,fireSpeedLocal);
-                this.bullet.setRotation(angle + Math.PI/2);
+    configBullet(bullet) {
+        this.physics.moveTo(bullet,this.mouse.x,this.mouse.y,this.fireSpeedLocal);
+        bullet.setRotation(this.a);
 
-                this.bullet.setCollideWorldBounds(true);
-                this.bullet.body.onWorldBounds = true;
-                this.bullet.body.world.on('worldbounds', function(body) {
-                    if (body.gameObject === this) {
-                        this.destroy();
-                    }
-                }, this.bullet);
+        bullet.body.onWorldBounds = true;
+        bullet.body.world.on('worldbounds', function(body) {
+            if (body.gameObject === this) {
+                this.destroy();
             }
-        }
-        this.physics.add.collider(this.asteroids, this.bullet, function(asteroid, bullet) {
-            bullet.destroy();
-            asteroid.destroy();
-        });
-        this.createAsteroids();
+        }, bullet);
+
     }
 
     createAsteroids() {
