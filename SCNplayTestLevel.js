@@ -24,13 +24,15 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.fadeout.play("fadeout", true);
 
         this.asteroids = this.physics.add.group();
+
+
+
         this.spaceship.lastSpawnedBig = 0;
         this.spaceship.lastSpawnedMedium = 0;
         this.spaceship.lastSpawnedSmall = 0;
         this.ewe = 0;
         this.ewe1 = 0;
         this.ewe2 = 0;
-        gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
         this.dif = 0;
         this.speedTick = 0;
         this.spawnRate1 = 150;
@@ -38,6 +40,8 @@ class SCNplayTestLevel extends Phaser.Scene {
     }
 
     update() {
+
+        gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
         var angle = Phaser.Math.Angle.Between(this.spaceship.x,this.spaceship.y,this.mouse.x,this.mouse.y);
         this.spaceship.setRotation(angle + Math.PI/2);
         this.aura.setRotation(angle + Math.PI/2);
@@ -113,7 +117,10 @@ class SCNplayTestLevel extends Phaser.Scene {
                 }, this.bullet);
             }
         }
-        this.physics.add.collider(this.asteroids, this.bullet);
+        this.physics.add.collider(this.asteroids, this.bullet, function(asteroid, bullet) {
+            bullet.destroy();
+            asteroid.destroy();
+        });
         this.createAsteroids();
     }
 
@@ -155,7 +162,6 @@ class SCNplayTestLevel extends Phaser.Scene {
     createBig() {
         
         var big = this.physics.add.image(16, 16, "ASTbig");
-        big.health = 20;
         this.asteroids.add(big);
         if (Math.random() > 0.5) {
             if (Math.random() > 0.5) {
