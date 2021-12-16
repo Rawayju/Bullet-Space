@@ -1,17 +1,17 @@
 var gameSettings = {
     shipSpeed: 0.475,
     shiftControl: 0.1,
-    fireRate: 3,
+    fireRate: 1,
     fireSpeed: 500,
-    asteroidSpawnRate: 800, // Line 12 comment
+    asteroidSpawnRate: 1000, // The less the harder
     levelAsteroids: {
-        big: 20,
-        medium: 20,
-        small: 20,
+        big: 4,
+        medium: 10,
+        small: 15,
     },
-    levelDifficulty: 100, // The less the harder 
+    levelDifficulty: 150, // The less the harder 
     asteroidSpeedBoost: 0, // To do
-    handicap: 100 // Line 12 comment
+    handicap: 100 // The less the harder
 }
 
 var config = {

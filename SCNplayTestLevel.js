@@ -29,9 +29,9 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.bullets = this.add.group();
         this.bullet = 0;
         // Add collisions
-        this.physics.add.collider(this.asteroids, this.bullets, function(asteroid, bullet) {
+        this.physics.add.overlap(this.asteroids, this.bullets, function(bullet, asteroid) {
             bullet.destroy();
-            asteroid.destroy();
+            asteroid.update();
         });
 
         this.spaceship.lastSpawnedBig = 0;
@@ -81,7 +81,7 @@ class SCNplayTestLevel extends Phaser.Scene {
                     this.fireSpeedLocal = gameSettings.fireSpeed * 1.25;
                 }
                 if (this.bullets.getChildren().length < 30) {
-                    this.createBullet();
+                    var bullet = new CreateBullet(this);
                 }
             }
         }
@@ -125,10 +125,6 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.aura.y = this.spaceship.y;
     }
 
-    createBullet() {
-        var beam = new CreateBullet(this);
-    }
-
     configBullet(bullet) {
         this.physics.moveTo(bullet,this.mouse.x,this.mouse.y,this.fireSpeedLocal);
         bullet.setRotation(this.a);
@@ -145,162 +141,55 @@ class SCNplayTestLevel extends Phaser.Scene {
     createAsteroids() {
         if (this.ewe < gameSettings.levelAsteroids.big) {
             if (this.spaceship.lastSpawnedBig > gameSettings.asteroidSpawnRate) {
-                this.createBig();
+                var ASTbig = new CreateBig(this);
+
                 gameSettings.asteroidSpawnRate = Phaser.Math.Between(this.spawnRate1, this.spawnRate2);
                 this.spaceship.lastSpawnedBig -= Phaser.Math.Between(gameSettings.handicap * 4, gameSettings.handicap * 6);
                 this.spaceship.lastSpawnedMedium -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 1);
                 this.spaceship.lastSpawnedSmall -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 1);
                 this.ewe += 1;
-            }
+            } 
+        } else {
+            console.log("big complete!");
         }
 
         if (this.ewe1 < gameSettings.levelAsteroids.medium) {
             if (this.spaceship.lastSpawnedMedium > gameSettings.asteroidSpawnRate) {
-                this.createMedium();
+                var ASTmedium = new CreateMedium(this);
                 gameSettings.asteroidSpawnRate = Phaser.Math.Between(this.spawnRate1, this.spawnRate2);
                 this.spaceship.lastSpawnedMedium -= Phaser.Math.Between(gameSettings.handicap * 4, gameSettings.handicap * 6);
                 this.spaceship.lastSpawnedBig -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 1);
                 this.spaceship.lastSpawnedSmall -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 1);
                 this.ewe1 += 1;
             }
+        } else {
+            console.log("medium complete!");
         }
 
         if (this.ewe2 < gameSettings.levelAsteroids.small) {
             if (this.spaceship.lastSpawnedSmall > gameSettings.asteroidSpawnRate) {
-                this.createSmall();
+                var ASTsmall = new CreateSmall(this);
                 gameSettings.asteroidSpawnRate = Phaser.Math.Between(this.spawnRate1, this.spawnRate2);
                 this.spaceship.lastSpawnedSmall -= Phaser.Math.Between(gameSettings.handicap * 4, gameSettings.handicap * 6);
                 this.spaceship.lastSpawnedBig -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 6);
                 this.spaceship.lastSpawnedMedium -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 6);
                 this.ewe2 += 1;
             }
+        } else {
+            console.log("small complete!");
         }
     }
 
-    createBig() {
-        
-        var big = this.physics.add.image(16, 16, "ASTbig");
-        this.asteroids.add(big);
-        if (Math.random() > 0.5) {
-            if (Math.random() > 0.5) {
-                big.setRandomPosition(0, 5, game.config.width, 10);
-            } else {
-                big.setRandomPosition(0, game.config.height + 5, game.config.width, game.config.height + 10);
-            }
-        } else {
-            if (Math.random() > 0.5) {
-                big.setRandomPosition(5, game.config.height, 10, 0);
-            } else {
-                big.setRandomPosition(game.config.width + 5, game.config.height, game.config.width + 10, 0);
-            }
-        }
-
-        if (Math.random() > 0.5) {
-            var randomX = Phaser.Math.Between(10, 30);
-        } else {
-            var randomX = Phaser.Math.Between(-30, -10);
-        }
-        if (Math.random() > 0.5) {
-            var randomY = Phaser.Math.Between(10, 30);
-        } else {
-            var randomY = Phaser.Math.Between(-30, -10);
-        }
-        big.setVelocity(randomX, randomY);
-        big.setCollideWorldBounds(true);
-        big.setBounce(1);
-    }
-
-    createMedium() {
-        
-        var medium = this.physics.add.sprite(16, 16, "ASTmedium");
-        this.asteroids.add(medium);
-        if (Math.random() > 0.5) {
-            if (Math.random() > 0.5) {
-                medium.setRandomPosition(0, 5, game.config.width, 10);
-            } else {
-                medium.setRandomPosition(0, game.config.height + 5, game.config.width, game.config.height + 10);
-            }
-        } else {
-            if (Math.random() > 0.5) {
-                medium.setRandomPosition(5, 0, 10, game.config.height);
-            } else {
-                medium.setRandomPosition(game.config.width + 5, 0, game.config.width + 10, game.config.height);
-            }
-        }
-    
-        if (Math.random() > 0.5) {
-            if (Math.random() > 0.5) {
-                medium.play("medium1");
-            } else {
-                medium.play("medium2");
-            }
-        } else {
-            if (Math.random() > 0.5) {
-                medium.play("medium3");
-            } else {
-                medium.play("medium4");
-            }
-        }
-
-        if (Math.random() > 0.5) {
-            var randomX = Phaser.Math.Between(15, 50);
-        } else {
-            var randomX = Phaser.Math.Between(-50, -15);
-        }
-        if (Math.random() > 0.5) {
-            var randomY = Phaser.Math.Between(15, 50);
-        } else {
-            var randomY = Phaser.Math.Between(-50, -15);
-        }
-        medium.setVelocity(randomX, randomY);
-        medium.setCollideWorldBounds(true);
-        medium.setBounce(1);
-    }
-
-    createSmall() {
-
-        var small = this.physics.add.sprite(16, 16, "ASTsmall");
-        this.asteroids.add(small);
-        if (Math.random() > 0.5) {
-            if (Math.random() > 0.5) {
-                small.setRandomPosition(0, 5, game.config.width, 10);
-            } else {
-                small.setRandomPosition(0, game.config.height + 5, game.config.width, game.config.height + 10);
-            }
-        } else {
-            if (Math.random() > 0.5) {
-                small.setRandomPosition(5, game.config.height, 10, 0);
-            } else {
-                small.setRandomPosition(game.config.width + 5, game.config.height, game.config.width + 10, 0);
-            }
-        }
-    
-        if (Math.random() > 0.5) {
-            small.play("small1");
-        } else {
-            small.play("small2");
-        }
-
-        if (Math.random() > 0.5) {
-            var randomX = Phaser.Math.Between(20, 60);
-        } else {
-            var randomX = Phaser.Math.Between(-60, -20);
-        }
-        if (Math.random() > 0.5) {
-            var randomY = Phaser.Math.Between(20, 60);
-        } else {
-            var randomY = Phaser.Math.Between(-60, -20);
-        }
-        small.setVelocity(randomX, randomY);
-        small.setCollideWorldBounds(true);
-        small.setBounce(1);
+    destroyedBig() {
+        var ASTmedium1 = new CreateMedium(this);
+        var ASTmedium2 = new CreateMedium(this);
     }
 
     difficulty() {
         this.dif += 1;
         this.speedTick += 1;
         if (gameSettings.handicap > 2 && this.dif > gameSettings.levelDifficulty) {
-            if (gameSettings.levelDifficulty > 50) {
+            if (gameSettings.levelDifficulty > 200) {
                 gameSettings.handicap -= 2;
                 this.dif = 0;
             } else {
@@ -310,7 +199,7 @@ class SCNplayTestLevel extends Phaser.Scene {
         }
 
         if (gameSettings.asteroidSpawnRate > 2 && this.dif > gameSettings.levelDifficulty) {
-            if (gameSettings.levelDifficulty > 50) {
+            if (gameSettings.levelDifficulty > 200) {
                 gameSettings.asteroidSpawnRate -= 2;
                 this.dif = 0;
             } else {
