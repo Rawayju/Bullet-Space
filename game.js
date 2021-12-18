@@ -11,14 +11,18 @@ var gameSettings = {
     },
     levelDifficulty: 150, // The less the harder 
     asteroidSpeedBoost: 0, // To do
-    handicap: 100 // The less the harder
+    handicap: 100, // The less the harder
+
+    DMGsmall: 0,
+    DMGmedium: 0,
+    DMGbig: 0
 }
 
 var config = {
     type: Phaser.AUTO,
     width: 246,
     height: 156,
-    scene: [SCNbootGame, SCNstartTestLevel, SCNplayTestLevel],
+    scene: [SCNbootGame, SCNstartTestLevel, SCNplayTestLevel, PauseShop],
     pixelArt: true,
     render: {
         antialias: true,
