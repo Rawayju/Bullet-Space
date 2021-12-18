@@ -79,14 +79,14 @@ class SCNplayTestLevel extends Phaser.Scene {
         // Create bullet
         if (this.mouse.isDown != true) {
             if (this.cursors.shift.isDown) {
-                this.fireRateLocal = gameSettings.fireRate * 1.45;
+                this.fireRateLocal = gameSettings.fireRate * 0.15;
             } else {
                 this.fireRateLocal = gameSettings.fireRate;
             }
             
             if (this.spaceship.lastFired > this.fireRateLocal) {
                 if (this.cursors.shift.isDown) {
-                    this.fireSpeedLocal = gameSettings.fireSpeed;
+                    this.fireSpeedLocal = gameSettings.fireSpeed * 0.75;
                 } else {
                     this.fireSpeedLocal = gameSettings.fireSpeed * 1.25;
                 }
@@ -131,17 +131,17 @@ class SCNplayTestLevel extends Phaser.Scene {
 
         if (this.cursors.left.isDown || this.wasd.A.isDown) {
             this.spaceship.setVelocityX(-vel);
-        }else if(this.cursors.right.isDown || this.wasd.D.isDown) {
+        } else if (this.cursors.right.isDown || this.wasd.D.isDown) {
             this.spaceship.setVelocityX(vel);
-        }else{
+        } else {
             this.spaceship.setVelocityX(0);
         }
 
         if (this.cursors.up.isDown || this.wasd.W.isDown) {
             this.spaceship.setVelocityY(-vel);
-        }else if(this.cursors.down.isDown || this.wasd.S.isDown) {
+        } else if (this.cursors.down.isDown || this.wasd.S.isDown) {
             this.spaceship.setVelocityY(vel);
-        }else{
+        } else {
             this.spaceship.setVelocityY(0);
         }
 
@@ -188,8 +188,6 @@ class SCNplayTestLevel extends Phaser.Scene {
                 this.spaceship.lastSpawnedSmall -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 1);
                 this.ewe += 1;
             } 
-        } else {
-            console.log("big complete!");
         }
 
         if (this.ewe1 < gameSettings.levelAsteroids.medium) {
@@ -201,8 +199,6 @@ class SCNplayTestLevel extends Phaser.Scene {
                 this.spaceship.lastSpawnedSmall -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 1);
                 this.ewe1 += 1;
             }
-        } else {
-            console.log("medium complete!");
         }
 
         if (this.ewe2 < gameSettings.levelAsteroids.small) {
@@ -214,8 +210,6 @@ class SCNplayTestLevel extends Phaser.Scene {
                 this.spaceship.lastSpawnedMedium -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 6);
                 this.ewe2 += 1;
             }
-        } else {
-            console.log("small complete!");
         }
     }
 

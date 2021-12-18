@@ -5,9 +5,9 @@ var gameSettings = {
     fireSpeed: 500,
     asteroidSpawnRate: 1000, // The less the harder
     levelAsteroids: {
-        big: 4,
-        medium: 10,
-        small: 15,
+        big: 99,
+        medium: 99,
+        small: 99,
     },
     levelDifficulty: 150, // The less the harder 
     asteroidSpeedBoost: 0, // To do
