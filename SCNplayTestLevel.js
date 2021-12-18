@@ -5,9 +5,13 @@ class SCNplayTestLevel extends Phaser.Scene {
 
     create() {
         this.background = this.add.sprite(config.width / 2,config.height / 2,"background");
+        this.background.alpha = 0.8;
         this.background.play("BC", true);
         this.FoR = this.add.sprite(config.width / 2,config.height / 2,"FoR").setScale(1.1).setBlendMode(Phaser.BlendModes.ADD);
         this.FoR.play("FoR", true);
+        this.pauseButton = this.add.sprite(config.width - 10,10,"pauseButton");
+        this.pauseButton.setInteractive();
+        this.pauseButton.alpha = 0.9;
 
         this.aura = this.physics.add.image(config.width / 2,config.height / 2, "aura").setBlendMode(Phaser.BlendModes.ADD);
         this.spaceship = this.physics.add.image(config.width / 2,config.height / 2, "spaceship");
@@ -26,12 +30,14 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.fadeout.play("fadeout", true);
 
         this.asteroids = this.physics.add.group();
+        this.gems = this.physics.add.group();
 
         // Bullets group
         this.bullets = this.add.group();
         this.bullet = 0;
         // Add collisions
         this.physics.add.overlap(this.asteroids, this.bullets, this.bulletHit, null, this);
+        this.physics.add.overlap(this.spaceship, this.gems, this.collectGem, null, this);
 
         this.input.on('gameobjectdown', this.createTarget, this);
 
@@ -48,6 +54,7 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.spawnRate2 = 500;
         this.target = this.spaceship;
 
+        this.background.money = 0;
         this.fireRateLocal = gameSettings.fireRate;
         this.fireSpeedLocal = gameSettings.fireSpeed;
         this.a = 0;
@@ -64,6 +71,7 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.targetAnim.y = this.target.y;
         if (this.target === this.spaceship) {
             this.targetAnim.depth = -99;
+            this.targetAnim.alpha = 0;
         }
 
         gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
@@ -76,41 +84,7 @@ class SCNplayTestLevel extends Phaser.Scene {
 
         this.spaceship.lastFired += 1;
 
-        // Create bullet
-        if (this.mouse.isDown != true) {
-            if (this.cursors.shift.isDown) {
-                this.fireRateLocal = gameSettings.fireRate * 0.15;
-            } else {
-                this.fireRateLocal = gameSettings.fireRate;
-            }
-            
-            if (this.spaceship.lastFired > this.fireRateLocal) {
-                if (this.cursors.shift.isDown) {
-                    this.fireSpeedLocal = gameSettings.fireSpeed * 0.75;
-                } else {
-                    this.fireSpeedLocal = gameSettings.fireSpeed * 1.25;
-                }
-                if (this.bullets.getChildren().length < 60) {
-                    if (this.target != this.spaceship) {
-                        var bullet = new CreateBullet(this, true);
-                        var bullet2 = new CreateBullet(this, true);
-                        // console.log("I am not spacechip :)");
-                    } else {
-                        var bullet = new CreateBullet(this, false);
-                        var bullet2 = new CreateBullet(this, false);
-                    }
-                }
-            }
-        }
-        
-        for (var i = 0; i < this.bullets.getChildren().length; i++) {
-            var bulletHolder = this.bullets.getChildren()[i];
-            bulletHolder.setBlendMode(Phaser.BlendModes.ADD);
-            
-            this.bullet = bulletHolder;
-        }
-        
-        // Manage asteroids
+        this.createBullet();
         this.createAsteroids();
         this.difficulty();
     }
@@ -149,7 +123,41 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.aura.y = this.spaceship.y;
     }
 
-    configBullet(bullet, clickTargetting) {
+    createBullet() {
+        if (this.mouse.isDown != true) {
+            if (this.cursors.shift.isDown) {
+                this.fireRateLocal = gameSettings.fireRate * 0.15;
+            } else {
+                this.fireRateLocal = gameSettings.fireRate;
+            }
+            
+            if (this.spaceship.lastFired > this.fireRateLocal) {
+                if (this.cursors.shift.isDown) {
+                    this.fireSpeedLocal = gameSettings.fireSpeed * 0.75;
+                } else {
+                    this.fireSpeedLocal = gameSettings.fireSpeed * 1.25;
+                }
+                if (this.bullets.getChildren().length < 200) {
+                    if (this.target != this.spaceship) {
+                        var bullet = new CreateBullet(this, true, false);
+                        var bullet2 = new CreateBullet(this, true, true);
+                    } else {
+                        var bullet = new CreateBullet(this, false, false);
+                        var bullet2 = new CreateBullet(this, false, true);
+                    }
+                }
+            }
+        }
+        
+        for (var i = 0; i < this.bullets.getChildren().length; i++) {
+            var bulletHolder = this.bullets.getChildren()[i];
+            bulletHolder.setBlendMode(Phaser.BlendModes.ADD);
+            
+            this.bullet = bulletHolder;
+        }
+    }
+
+    configBullet(bullet, clickTargetting, tint) {
         if (clickTargetting === true) {
             if (this.target.alpha < 1) {
                 this.target = this.spaceship;
@@ -168,15 +176,91 @@ class SCNplayTestLevel extends Phaser.Scene {
             this.aura.setRotation(this.a);
         }
 
+        if (tint === true) {
+            var hex = Phaser.Math.Between(0, 666666);
+            var hexN = "0x" + hex;
+            bullet.setTint(hexN);
+        }
         bullet.body.onWorldBounds = true;
         bullet.body.world.on('worldbounds', function(body) {
             if (body.gameObject === this) {
-                this.destroy();
+                this.play("hit");
+                this.body.velocity.x = 0;
+                this.body.velocity.y = 0;
+                this.once('animationcomplete', () => {
+                    this.destroy()
+                });
             }
         }, bullet);
 
     }
 
+    bulletHit(bullet, asteroid) {
+
+        this.explosion = this.add.sprite(Phaser.Math.Between(bullet.x - 5, bullet.x + 5),Phaser.Math.Between(bullet.y - 5, bullet.y + 5),"bullet");
+        this.explosion.play('hit', false)
+        this.explosion.once('animationcomplete', () => {
+            this.explosion.destroy()
+        });
+        bullet.destroy();
+        asteroid.update();
+        if (asteroid.alpha === 0) {
+            var ASTmedium1 = new CreateMedium(this, asteroid.x, asteroid.y);
+            var ASTmedium2 = new CreateMedium(this, asteroid.x, asteroid.y);
+            asteroid.destroy();
+        } else if (asteroid.alpha === 0.000001) {
+            if (Math.random() > 0.5) {
+                var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
+                var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
+                var ASTsmall3 = new CreateSmall(this, asteroid.x, asteroid.y);
+            } else {
+                var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
+                var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
+            }    
+        } else if (asteroid.alpha === 0.0000000001) {
+            if (Math.random() > 0.5) {
+                var gem = new CreateGem(this, asteroid.x, asteroid.y);
+                if (Math.random() > 0.5) {
+                    var gem1 = new CreateGem(this, asteroid.x, asteroid.y);
+                    if (Math.random() > 0.5) {
+                        var gem11 = new CreateGem(this, asteroid.x, asteroid.y);
+                        if (Math.random() > 0.5) {
+                            var gem111 = new CreateGem(this, asteroid.x, asteroid.y);
+                        } else if (Math.random() > 0.9) {
+                            var gem1111 = new CreateGem(this, asteroid.x, asteroid.y);
+                            var gem2 = new CreateGem(this, asteroid.x, asteroid.y);
+                            var gem3 = new CreateGem(this, asteroid.x, asteroid.y);
+                            var gem4 = new CreateGem(this, asteroid.x, asteroid.y);
+                            var gem5 = new CreateGem(this, asteroid.x, asteroid.y);
+                            var gem6 = new CreateGem(this, asteroid.x, asteroid.y);
+                        }
+                    }
+                }
+            } else {
+                var gem = new CreateGem(this, asteroid.x, asteroid.y);
+                var gem2 = new CreateGem(this, asteroid.x, asteroid.y);
+            }    
+            asteroid.destroy();
+        }
+    }
+
+    createTarget(pointer, target) {
+        if (target.alpha === 0.9) {
+            this.scene.launch('pauseShop')
+            this.scene.pause();
+        } else {
+            this.target = target;
+            this.targetAnim.destroy();
+            this.targetAnim.depth = 2;
+            this.targetAnim.alpha = 1;
+            this.targetAnim = this.add.sprite(target.x,target.y,"aim");
+            this.targetAnim.play("aimStart", true);
+            this.targetAnim.on('animationcomplete', function() {
+                this.play("aimIdle");
+            });
+        }
+    }
+    
     createAsteroids() {
         if (this.ewe < gameSettings.levelAsteroids.big) {
             if (this.spaceship.lastSpawnedBig > gameSettings.asteroidSpawnRate) {
@@ -213,6 +297,18 @@ class SCNplayTestLevel extends Phaser.Scene {
         }
     }
 
+    collectGem(ship, gem) {
+        
+        if (gem.alpha === 0.9999) {
+            this.background.money += 10;
+        } else {
+            this.background.money += 5;
+        }
+
+        gem.destroy();
+        console.log(this.background.money);
+    }
+
     difficulty() {
         this.dif += 1;
         this.speedTick += 1;
@@ -240,43 +336,5 @@ class SCNplayTestLevel extends Phaser.Scene {
             gameSettings.asteroidSpeedBoost += 1;
             this.speedTick = 0;
         }
-    }
-
-
-    bulletHit(bullet, asteroid) {
-
-        this.explosion = this.add.sprite(Phaser.Math.Between(bullet.x - 5, bullet.x + 5),Phaser.Math.Between(bullet.y - 5, bullet.y + 5),"bullet");
-        this.explosion.play('hit', false)
-        this.explosion.once('animationcomplete', () => {
-            this.explosion.destroy()
-        });
-        bullet.destroy();
-        asteroid.update();
-        if (asteroid.alpha === 0) {
-            var ASTmedium1 = new CreateMedium(this, asteroid.x, asteroid.y);
-            var ASTmedium2 = new CreateMedium(this, asteroid.x, asteroid.y);
-            asteroid.destroy();
-        } else if (asteroid.alpha === 0.000001) {
-            if (Math.random() > 0.5) {
-                var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
-                var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
-                var ASTsmall3 = new CreateSmall(this, asteroid.x, asteroid.y);
-            } else {
-                var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
-                var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
-            }    
-            asteroid.destroy();
-        }
-    }
-
-    createTarget(pointer, target) {
-        this.target = target;
-        this.targetAnim.destroy();
-        this.targetAnim.depth = 2;
-        this.targetAnim = this.add.sprite(target.x,target.y,"aim");
-        this.targetAnim.play("aimStart", true);
-        this.targetAnim.on('animationcomplete', function() {
-            this.play("aimIdle");
-        });
     }
 }
