@@ -11,6 +11,8 @@ class SCNplayTestLevel extends Phaser.Scene {
 
         this.aura = this.physics.add.image(config.width / 2,config.height / 2, "aura").setBlendMode(Phaser.BlendModes.ADD);
         this.spaceship = this.physics.add.image(config.width / 2,config.height / 2, "spaceship");
+        this.targetAnim = this.add.sprite(this.aura.x * 99,this.aura.y * 99,"aim").setScale(0);
+        this.targetAnim.depth = -1;
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys("W,A,S,D");
@@ -31,6 +33,8 @@ class SCNplayTestLevel extends Phaser.Scene {
         // Add collisions
         this.physics.add.overlap(this.asteroids, this.bullets, this.bulletHit, null, this);
 
+        this.input.on('gameobjectdown', this.createTarget, this);
+
         this.spaceship.depth = 50;
         this.spaceship.lastSpawnedBig = 0;
         this.spaceship.lastSpawnedMedium = 0;
@@ -42,19 +46,27 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.speedTick = 0;
         this.spawnRate1 = 150;
         this.spawnRate2 = 500;
+        this.target = this.spaceship;
 
         this.fireRateLocal = gameSettings.fireRate;
         this.fireSpeedLocal = gameSettings.fireSpeed;
         this.a = 0;
+        this.aC = 0;
     }
 
     update() {
 
         var angle = Phaser.Math.Angle.Between(this.spaceship.x,this.spaceship.y,this.mouse.x,this.mouse.y);
         this.a = angle + Math.PI/2;
+        var angleClick = Phaser.Math.Angle.Between(this.spaceship.x,this.spaceship.y,this.target.x,this.target.y);
+        this.aC = angleClick + Math.PI/2;
+        this.targetAnim.x = this.target.x;
+        this.targetAnim.y = this.target.y;
+        if (this.target === this.spaceship) {
+            this.targetAnim.depth = -99;
+        }
+
         gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
-        this.spaceship.setRotation(this.a);
-        this.aura.setRotation(this.a);
 
         this.moveShip();
     
@@ -78,9 +90,15 @@ class SCNplayTestLevel extends Phaser.Scene {
                 } else {
                     this.fireSpeedLocal = gameSettings.fireSpeed * 1.25;
                 }
-                if (this.bullets.getChildren().length < 30) {
-                    var bullet = new CreateBullet(this);
-                    var bullet2 = new CreateBullet(this);
+                if (this.bullets.getChildren().length < 60) {
+                    if (this.target != this.spaceship) {
+                        var bullet = new CreateBullet(this, true);
+                        var bullet2 = new CreateBullet(this, true);
+                        // console.log("I am not spacechip :)");
+                    } else {
+                        var bullet = new CreateBullet(this, false);
+                        var bullet2 = new CreateBullet(this, false);
+                    }
                 }
             }
         }
@@ -131,9 +149,24 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.aura.y = this.spaceship.y;
     }
 
-    configBullet(bullet) {
-        this.physics.moveTo(bullet,Phaser.Math.Between(this.mouse.x - 2, this.mouse.x + 2),Phaser.Math.Between(this.mouse.y - 1, this.mouse.y + 1),Phaser.Math.Between(this.fireSpeedLocal - 17, this.fireSpeedLocal + 17));
-        bullet.setRotation(this.a);
+    configBullet(bullet, clickTargetting) {
+        if (clickTargetting === true) {
+            if (this.target.alpha < 1) {
+                this.target = this.spaceship;
+                this.physics.moveTo(bullet,Phaser.Math.Between(this.mouse.x - 2, this.mouse.x + 2),Phaser.Math.Between(this.mouse.y - 1, this.mouse.y + 1),Phaser.Math.Between(this.fireSpeedLocal - 17, this.fireSpeedLocal + 17));
+                bullet.setRotation(this.a);
+            } else {
+                this.physics.moveTo(bullet,Phaser.Math.Between(this.target.x - 2, this.target.x + 2),Phaser.Math.Between(this.target.y - 1, this.target.y + 1),Phaser.Math.Between(this.fireSpeedLocal - 17, this.fireSpeedLocal + 17));
+                bullet.setRotation(this.aC);
+            }
+            this.spaceship.setRotation(this.aC);
+            this.aura.setRotation(this.aC);
+        } else {
+            this.physics.moveTo(bullet,Phaser.Math.Between(this.mouse.x - 2, this.mouse.x + 2),Phaser.Math.Between(this.mouse.y - 1, this.mouse.y + 1),Phaser.Math.Between(this.fireSpeedLocal - 17, this.fireSpeedLocal + 17));
+            bullet.setRotation(this.a);
+            this.spaceship.setRotation(this.a);
+            this.aura.setRotation(this.a);
+        }
 
         bullet.body.onWorldBounds = true;
         bullet.body.world.on('worldbounds', function(body) {
@@ -186,10 +219,6 @@ class SCNplayTestLevel extends Phaser.Scene {
         }
     }
 
-    configSmall(small) {
-        small.setBlendMode(Phaser.BlendModes.ADD);
-    }
-
     difficulty() {
         this.dif += 1;
         this.speedTick += 1;
@@ -234,10 +263,26 @@ class SCNplayTestLevel extends Phaser.Scene {
             var ASTmedium2 = new CreateMedium(this, asteroid.x, asteroid.y);
             asteroid.destroy();
         } else if (asteroid.alpha === 0.000001) {
-            var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
-            var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
-            var ASTsmall3 = new CreateSmall(this, asteroid.x, asteroid.y);
+            if (Math.random() > 0.5) {
+                var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
+                var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
+                var ASTsmall3 = new CreateSmall(this, asteroid.x, asteroid.y);
+            } else {
+                var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
+                var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
+            }    
             asteroid.destroy();
         }
+    }
+
+    createTarget(pointer, target) {
+        this.target = target;
+        this.targetAnim.destroy();
+        this.targetAnim.depth = 2;
+        this.targetAnim = this.add.sprite(target.x,target.y,"aim");
+        this.targetAnim.play("aimStart", true);
+        this.targetAnim.on('animationcomplete', function() {
+            this.play("aimIdle");
+        });
     }
 }

@@ -43,6 +43,7 @@ class CreateBig extends Phaser.GameObjects.Sprite {
         
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
+        this.setInteractive();
         this.health = 208 * 2;
     }   
 

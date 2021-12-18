@@ -38,8 +38,8 @@ class SCNbootGame extends Phaser.Scene {
         });
 
         this.load.spritesheet("aim", "assets/Images/SpriteSheets/bulletAim.png", {
-            frameWidth: 19,
-            frameHeight: 19
+            frameWidth: 38,
+            frameHeight: 38
         });
         this.load.spritesheet("bulletHit", "assets/Images/SpriteSheets/bulletExplode.png", {
             frameWidth: 5,
@@ -59,11 +59,10 @@ class SCNbootGame extends Phaser.Scene {
             key: "aimStart",
             frames: this.anims.generateFrameNumbers("aim", { start: 0, end: 3 }),
             frameRate: 8,
-            repeat: -1
         });
         this.anims.create({
             key: "aimIdle",
-            frames: this.anims.generateFrameNumbers("aim", { start: 3, end: 4 }),
+            frames: this.anims.generateFrameNumbers("aim", { start: 4, end: 5 }),
             frameRate: 2,
             repeat: -1
         });

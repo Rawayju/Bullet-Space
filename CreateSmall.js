@@ -51,16 +51,17 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
             var randomY = Phaser.Math.Between(-70, -20);
             this.body.velocity.y = randomY;
         }
-        
-        scene.configSmall(this);
+
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
         this.health = 18 * 2;
+        this.setInteractive();
     }
 
     update() {
         this.health -= 1;
         if (this.health <= 0) {
+            this.alpha = 0.0000000001;
             this.destroy();
         }
     }
