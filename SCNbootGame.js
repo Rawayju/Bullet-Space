@@ -21,6 +21,8 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 247,
             frameHeight: 157
         });
+        this.load.image("gem", "assets/Images/Sprites/gem.png");
+        this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
         this.load.image("sCover", "assets/Images/Sprites/screenCover.png");
         this.load.image("sCover2", "assets/Images/Sprites/screenCover2.png");
         this.load.image("mCover", "assets/Images/Sprites/multiplyCover.png");
@@ -50,11 +52,26 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 11,
             frameHeight: 11
         });
+
+        this.load.image("pauseButton", "assets/Images/Sprites/Pause Screen/pauseButton.png");
+        this.load.image("returnButton", "assets/Images/Sprites/Pause Screen/returnButton.png");
+        this.load.image("pauseScreen", "assets/Images/Sprites/Pause Screen/pauseScreen.png");
+        this.load.image("button", "assets/Images/Sprites/Pause Screen/button.png");
+        this.load.spritesheet("buttonAnim", "assets/Images/Sprites/Pause Screen/buttonPress.png", {
+            frameWidth: 9,
+            frameHeight: 9
+        });
     }
 
     create() {
         this.add.text(20, 20, "Loading game...");
         
+        this.anims.create({
+            key: "buttonPress",
+            frames: this.anims.generateFrameNumbers("buttonAnim"),
+            frameRate: 15,
+        });
+
         this.anims.create({
             key: "aimStart",
             frames: this.anims.generateFrameNumbers("aim", { start: 0, end: 3 }),
