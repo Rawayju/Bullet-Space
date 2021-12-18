@@ -1,5 +1,5 @@
 class CreateBullet extends Phaser.GameObjects.Sprite {
-    constructor(scene, bool) {
+    constructor(scene, bool, tint) {
 
         super(scene,scene.spaceship.x,scene.spaceship.y,"bullet");
         scene.add.existing(this);
@@ -11,10 +11,10 @@ class CreateBullet extends Phaser.GameObjects.Sprite {
         this.body.setCollideWorldBounds(true);
         
         if (bool === true) {
-            scene.configBullet(this, true);
+            scene.configBullet(this, true, tint);
             // console.log("fire me to target pls");
         } else {
-            scene.configBullet(this, false);
+            scene.configBullet(this, false, tint);
             // console.log("fire me to target pls");
         }
 
