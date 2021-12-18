@@ -54,11 +54,12 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
 
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
-        this.health = 18 * 2;
+        this.health = 18 * 3;
         this.setInteractive();
     }
 
     update() {
+        this.health -= gameSettings.DMGsmall;
         this.health -= 1;
         if (this.health <= 0) {
             this.alpha = 0.0000000001;
