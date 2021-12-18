@@ -36,11 +36,51 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 10,
             frameHeight: 10
         });
+
+        this.load.spritesheet("aim", "assets/Images/SpriteSheets/bulletAim.png", {
+            frameWidth: 19,
+            frameHeight: 19
+        });
+        this.load.spritesheet("bulletHit", "assets/Images/SpriteSheets/bulletExplode.png", {
+            frameWidth: 5,
+            frameHeight: 5
+        });
+
+        this.load.spritesheet("trail", "assets/Images/SpriteSheets/trail.png", {
+            frameWidth: 11,
+            frameHeight: 11
+        });
     }
 
     create() {
         this.add.text(20, 20, "Loading game...");
         
+        this.anims.create({
+            key: "aimStart",
+            frames: this.anims.generateFrameNumbers("aim", { start: 0, end: 3 }),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "aimIdle",
+            frames: this.anims.generateFrameNumbers("aim", { start: 3, end: 4 }),
+            frameRate: 2,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "hit",
+            frames: this.anims.generateFrameNumbers("bulletHit"),
+            frameRate: 14,
+            hideOnComplete: true
+        });
+
+        this.anims.create({
+            key: "trail",
+            frames: this.anims.generateFrameNumbers("trail"),
+            frameRate: 14,
+            hideOnComplete: true
+        });
+
         this.anims.create({
             key: "jamming",
             frames: this.anims.generateFrameNumbers("spacen", { start: 0, end: 5 }),

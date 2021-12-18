@@ -29,11 +29,9 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.bullets = this.add.group();
         this.bullet = 0;
         // Add collisions
-        this.physics.add.overlap(this.asteroids, this.bullets, function(bullet, asteroid) {
-            bullet.destroy();
-            asteroid.update();
-        });
+        this.physics.add.overlap(this.asteroids, this.bullets, this.bulletHit, null, this);
 
+        this.spaceship.depth = 50;
         this.spaceship.lastSpawnedBig = 0;
         this.spaceship.lastSpawnedMedium = 0;
         this.spaceship.lastSpawnedSmall = 0;
@@ -82,6 +80,7 @@ class SCNplayTestLevel extends Phaser.Scene {
                 }
                 if (this.bullets.getChildren().length < 30) {
                     var bullet = new CreateBullet(this);
+                    var bullet2 = new CreateBullet(this);
                 }
             }
         }
@@ -99,6 +98,13 @@ class SCNplayTestLevel extends Phaser.Scene {
     }
 
     moveShip() {
+        this.trail = this.add.sprite(Phaser.Math.Between(this.spaceship.x - 3, this.spaceship.x + 3),Phaser.Math.Between(this.spaceship.y - 3, this.spaceship.y + 3),"trail").setBlendMode(Phaser.BlendModes.ADD);
+        this.trail.depth = 1;
+        this.trail.play('trail', false)
+        this.trail.once('animationcomplete', () => {
+            this.trail.destroy()
+        });
+
         let vel = 250 * gameSettings.shipSpeed;
         
         if (this.cursors.shift.isDown) {
@@ -126,7 +132,7 @@ class SCNplayTestLevel extends Phaser.Scene {
     }
 
     configBullet(bullet) {
-        this.physics.moveTo(bullet,this.mouse.x,this.mouse.y,this.fireSpeedLocal);
+        this.physics.moveTo(bullet,Phaser.Math.Between(this.mouse.x - 2, this.mouse.x + 2),Phaser.Math.Between(this.mouse.y - 1, this.mouse.y + 1),Phaser.Math.Between(this.fireSpeedLocal - 17, this.fireSpeedLocal + 17));
         bullet.setRotation(this.a);
 
         bullet.body.onWorldBounds = true;
@@ -155,7 +161,7 @@ class SCNplayTestLevel extends Phaser.Scene {
 
         if (this.ewe1 < gameSettings.levelAsteroids.medium) {
             if (this.spaceship.lastSpawnedMedium > gameSettings.asteroidSpawnRate) {
-                var ASTmedium = new CreateMedium(this);
+                var ASTmedium = new CreateMedium(this, 0, 0);
                 gameSettings.asteroidSpawnRate = Phaser.Math.Between(this.spawnRate1, this.spawnRate2);
                 this.spaceship.lastSpawnedMedium -= Phaser.Math.Between(gameSettings.handicap * 4, gameSettings.handicap * 6);
                 this.spaceship.lastSpawnedBig -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 1);
@@ -168,7 +174,7 @@ class SCNplayTestLevel extends Phaser.Scene {
 
         if (this.ewe2 < gameSettings.levelAsteroids.small) {
             if (this.spaceship.lastSpawnedSmall > gameSettings.asteroidSpawnRate) {
-                var ASTsmall = new CreateSmall(this);
+                var ASTsmall = new CreateSmall(this, 0, 0);
                 gameSettings.asteroidSpawnRate = Phaser.Math.Between(this.spawnRate1, this.spawnRate2);
                 this.spaceship.lastSpawnedSmall -= Phaser.Math.Between(gameSettings.handicap * 4, gameSettings.handicap * 6);
                 this.spaceship.lastSpawnedBig -= Phaser.Math.Between(gameSettings.handicap * 1, gameSettings.handicap * 6);
@@ -180,9 +186,8 @@ class SCNplayTestLevel extends Phaser.Scene {
         }
     }
 
-    destroyedBig() {
-        var ASTmedium1 = new CreateMedium(this);
-        var ASTmedium2 = new CreateMedium(this);
+    configSmall(small) {
+        small.setBlendMode(Phaser.BlendModes.ADD);
     }
 
     difficulty() {
@@ -211,6 +216,28 @@ class SCNplayTestLevel extends Phaser.Scene {
         if (this.speedTick > gameSettings.levelDifficulty * 4) {
             gameSettings.asteroidSpeedBoost += 1;
             this.speedTick = 0;
+        }
+    }
+
+
+    bulletHit(bullet, asteroid) {
+
+        this.explosion = this.add.sprite(Phaser.Math.Between(bullet.x - 5, bullet.x + 5),Phaser.Math.Between(bullet.y - 5, bullet.y + 5),"bullet");
+        this.explosion.play('hit', false)
+        this.explosion.once('animationcomplete', () => {
+            this.explosion.destroy()
+        });
+        bullet.destroy();
+        asteroid.update();
+        if (asteroid.alpha === 0) {
+            var ASTmedium1 = new CreateMedium(this, asteroid.x, asteroid.y);
+            var ASTmedium2 = new CreateMedium(this, asteroid.x, asteroid.y);
+            asteroid.destroy();
+        } else if (asteroid.alpha === 0.000001) {
+            var ASTsmall1 = new CreateSmall(this, asteroid.x, asteroid.y);
+            var ASTsmall2 = new CreateSmall(this, asteroid.x, asteroid.y);
+            var ASTsmall3 = new CreateSmall(this, asteroid.x, asteroid.y);
+            asteroid.destroy();
         }
     }
 }
