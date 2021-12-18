@@ -1,27 +1,32 @@
 class CreateSmall extends Phaser.GameObjects.Sprite {
-    constructor(scene) {
+    constructor(scene, ax, ay) {
 
-        if (Math.random() > 0.5) {
+        if (ax === 0 & ay === 0) {
             if (Math.random() > 0.5) {
-                var x = Phaser.Math.Between(0, game.config.width);
-                var y = Phaser.Math.Between(5, 10);
-                super(scene,x,y,"ASTsmall");
+                if (Math.random() > 0.5) {
+                    var x = Phaser.Math.Between(0, game.config.width);
+                    var y = Phaser.Math.Between(5, 10);
+                    super(scene,x,y,"ASTsmall");
+                } else {
+                    var x = Phaser.Math.Between(0, game.config.width);
+                    var y = Phaser.Math.Between(game.config.height + 5, game.config.height + 10);
+                    super(scene,x,y,"ASTsmall");
+                }
             } else {
-                var x = Phaser.Math.Between(0, game.config.width);
-                var y = Phaser.Math.Between(game.config.height + 5, game.config.height + 10);
-                super(scene,x,y,"ASTsmall");
+                if (Math.random() > 0.5) {
+                    var x = Phaser.Math.Between(5, 10);
+                    var y = Phaser.Math.Between(game.config.height, 0);
+                    super(scene,x,y,"ASTsmall");
+                } else {
+                    var x = Phaser.Math.Between(game.config.width + 5, game.config.width + 10);
+                    var y = Phaser.Math.Between(game.config.height, 0);
+                    super(scene,x,y,"ASTsmall");
+                }
             }
         } else {
-            if (Math.random() > 0.5) {
-                var x = Phaser.Math.Between(5, 10);
-                var y = Phaser.Math.Between(game.config.height, 0);
-                super(scene,x,y,"ASTsmall");
-            } else {
-                var x = Phaser.Math.Between(game.config.width + 5, game.config.width + 10);
-                var y = Phaser.Math.Between(game.config.height, 0);
-                super(scene,x,y,"ASTsmall");
-            }
+            super(scene,ax,ay,"ASTsmall");
         }
+
         if (Math.random() > 0.5) {
             this.play("small1");
         } else {
@@ -47,9 +52,10 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
             this.body.velocity.y = randomY;
         }
         
+        scene.configSmall(this);
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
-        this.health = 18;
+        this.health = 18 * 2;
     }
 
     update() {

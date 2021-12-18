@@ -1,27 +1,32 @@
 class CreateMedium extends Phaser.GameObjects.Sprite {
-    constructor(scene) {
+    constructor(scene, ax, ay) {
 
-        if (Math.random() > 0.5) {
+        if (ax === 0 & ay === 0) {
             if (Math.random() > 0.5) {
-                var x = Phaser.Math.Between(0, game.config.width);
-                var y = Phaser.Math.Between(5, 10);
-                super(scene,x,y,"ASTmedium");
+                if (Math.random() > 0.5) {
+                    var x = Phaser.Math.Between(0, game.config.width);
+                    var y = Phaser.Math.Between(5, 10);
+                    super(scene,x,y,"ASTmedium");
+                } else {
+                    var x = Phaser.Math.Between(0, game.config.width);
+                    var y = Phaser.Math.Between(game.config.height + 5, game.config.height + 10);
+                    super(scene,x,y,"ASTmedium");
+                }
             } else {
-                var x = Phaser.Math.Between(0, game.config.width);
-                var y = Phaser.Math.Between(game.config.height + 5, game.config.height + 10);
-                super(scene,x,y,"ASTmedium");
+                if (Math.random() > 0.5) {
+                    var x = Phaser.Math.Between(5, 10);
+                    var y = Phaser.Math.Between(game.config.height, 0);
+                    super(scene,x,y,"ASTmedium");
+                } else {
+                    var x = Phaser.Math.Between(game.config.width + 5, game.config.width + 10);
+                    var y = Phaser.Math.Between(game.config.height, 0);
+                    super(scene,x,y,"ASTmedium");
+                }
             }
-        } else {
-            if (Math.random() > 0.5) {
-                var x = Phaser.Math.Between(5, 10);
-                var y = Phaser.Math.Between(game.config.height, 0);
-                super(scene,x,y,"ASTmedium");
-            } else {
-                var x = Phaser.Math.Between(game.config.width + 5, game.config.width + 10);
-                var y = Phaser.Math.Between(game.config.height, 0);
-                super(scene,x,y,"ASTmedium");
-            }
+        } else { 
+            super(scene,ax,ay,"ASTmedium");
         }
+        
         if (Math.random() > 0.5) {
             if (Math.random() > 0.5) {
                 this.play("medium1");
@@ -57,13 +62,13 @@ class CreateMedium extends Phaser.GameObjects.Sprite {
         
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
-        this.health = 52;
+        this.health = 52 * 2;
     }
 
     update() {
         this.health -= 1;
         if (this.health <= 0) {
-            this.destroy();
+            this.alpha = 0.000001;
         }
     }
 }
