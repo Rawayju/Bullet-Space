@@ -58,8 +58,8 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
         this.setInteractive();
     }
 
-    update() {
-        this.health -= gameSettings.DMGsmall;
+    update(no, nope, all) {
+        this.health -= all;
         this.health -= 1;
         if (this.health <= 0) {
             this.alpha = 0.0000000001;

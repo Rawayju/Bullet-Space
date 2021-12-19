@@ -62,11 +62,13 @@ class CreateMedium extends Phaser.GameObjects.Sprite {
         
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
-        this.health = 52 * 3;
+        this.health = 52 * 2;
         this.setInteractive();
     }
 
-    update() {
+    update(no, all, nope) {
+        // console.log(all);
+        this.health -= all;
         this.health -= 1;
         if (this.health <= 0) {
             this.alpha = 0.000001;
