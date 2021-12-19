@@ -9,9 +9,12 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.background.play("BC", true);
         this.FoR = this.add.sprite(config.width / 2,config.height / 2,"FoR").setScale(1.1).setBlendMode(Phaser.BlendModes.ADD);
         this.FoR.play("FoR", true);
-        this.pauseButton = this.add.sprite(config.width - 10,10,"pauseButton");
+        this.pauseButton = this.add.sprite(15,10,"pauseButton");
         this.pauseButton.setInteractive();
         this.pauseButton.alpha = 0.9;
+        this.moneyDisplay = this.add.bitmapText(25,5,"pix", 8);
+        this.add.sprite(16,23,"shop");
+        this.moneyDisplay.depth = 97;
 
         this.aura = this.physics.add.image(config.width / 2,config.height / 2, "aura").setBlendMode(Phaser.BlendModes.ADD);
         this.spaceship = this.physics.add.image(config.width / 2,config.height / 2, "spaceship");
@@ -54,14 +57,15 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.spawnRate2 = 500;
         this.target = this.spaceship;
 
-        this.background.money = 0;
-        this.fireRateLocal = gameSettings.fireRate;
+        this.fireRateLocal = gameSettings.firerate;
         this.fireSpeedLocal = gameSettings.fireSpeed;
         this.a = 0;
         this.aC = 0;
     }
 
     update() {
+
+        this.moneyDisplay.text = gameSettings.money;
 
         var angle = Phaser.Math.Angle.Between(this.spaceship.x,this.spaceship.y,this.mouse.x,this.mouse.y);
         this.a = angle + Math.PI/2;
@@ -126,16 +130,25 @@ class SCNplayTestLevel extends Phaser.Scene {
     createBullet() {
         if (this.mouse.isDown != true) {
             if (this.cursors.shift.isDown) {
-                this.fireRateLocal = gameSettings.fireRate * 0.15;
+                this.fireRateLocal = gameSettings.firerate - gameSettings.shiftFireRate;
+
+                this.damageLocalBig = gameSettings.DMGbig + gameSettings.DMGall;
+                this.damageLocalMedium = gameSettings.DMGmedium + gameSettings.DMGall;
+                this.damageLocalSmall = gameSettings.DMGsmall + gameSettings.DMGall;
+
             } else {
-                this.fireRateLocal = gameSettings.fireRate;
+                this.fireRateLocal = gameSettings.firerate;
+
+                this.damageLocalBig = gameSettings.DMGbig;
+                this.damageLocalMedium = gameSettings.DMGmedium;
+                this.damageLocalSmall = gameSettings.DMGsmall;
             }
             
             if (this.spaceship.lastFired > this.fireRateLocal) {
                 if (this.cursors.shift.isDown) {
-                    this.fireSpeedLocal = gameSettings.fireSpeed * 0.75;
+                    this.fireSpeedLocal = gameSettings.fireSpeed //* 0.75;
                 } else {
-                    this.fireSpeedLocal = gameSettings.fireSpeed * 1.25;
+                    this.fireSpeedLocal = gameSettings.fireSpeed //* 1.25;
                 }
                 if (this.bullets.getChildren().length < 200) {
                     if (this.target != this.spaceship) {
@@ -203,7 +216,7 @@ class SCNplayTestLevel extends Phaser.Scene {
             this.explosion.destroy()
         });
         bullet.destroy();
-        asteroid.update();
+        asteroid.update(this.damageLocalBig, this.damageLocalMedium, this.damageLocalSmall);
         if (asteroid.alpha === 0) {
             var ASTmedium1 = new CreateMedium(this, asteroid.x, asteroid.y);
             var ASTmedium2 = new CreateMedium(this, asteroid.x, asteroid.y);
@@ -300,13 +313,13 @@ class SCNplayTestLevel extends Phaser.Scene {
     collectGem(ship, gem) {
         
         if (gem.alpha === 0.9999) {
-            this.background.money += 10;
+            gameSettings.money += 25;
         } else {
-            this.background.money += 5;
+            gameSettings.money += 12;
         }
 
         gem.destroy();
-        console.log(this.background.money);
+        console.log(gameSettings.money);
     }
 
     difficulty() {
