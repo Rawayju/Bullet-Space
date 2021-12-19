@@ -4,6 +4,8 @@ class SCNbootGame extends Phaser.Scene {
     }
 
     preload() {
+
+        this.load.bitmapFont("pix", "assets/bitmap/j_0.png", "assets/bitmap/j.xml")
         
         this.load.spritesheet("spacen", "assets/Images/SpriteSheets/Spacen.png", {
             frameWidth: 50,
@@ -23,6 +25,7 @@ class SCNbootGame extends Phaser.Scene {
         });
         this.load.image("gem", "assets/Images/Sprites/gem.png");
         this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
+        this.load.image("shop", "assets/Images/Sprites/shop.png");
         this.load.image("sCover", "assets/Images/Sprites/screenCover.png");
         this.load.image("sCover2", "assets/Images/Sprites/screenCover2.png");
         this.load.image("mCover", "assets/Images/Sprites/multiplyCover.png");
