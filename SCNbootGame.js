@@ -46,6 +46,23 @@ class SCNbootGame extends Phaser.Scene {
         this.load.image("tip2", "assets/Images/Sprites/Pause Screen/tip2.png");
         this.load.image("tip3", "assets/Images/Sprites/Pause Screen/tip3.png");
         this.load.image("tip4", "assets/Images/Sprites/Pause Screen/tip4.png");
+
+        this.load.image("health12", "assets/Images/Sprites/Health/health12.png");
+        this.load.image("health11", "assets/Images/Sprites/Health/health11.png");
+        this.load.image("health10", "assets/Images/Sprites/Health/health10.png");
+        this.load.image("health9", "assets/Images/Sprites/Health/health9.png");
+        this.load.image("health8", "assets/Images/Sprites/Health/health8.png");
+        this.load.image("health7", "assets/Images/Sprites/Health/health7.png");
+        this.load.image("health6", "assets/Images/Sprites/Health/health6.png");
+        this.load.image("health5", "assets/Images/Sprites/Health/health5.png");
+        this.load.image("health4", "assets/Images/Sprites/Health/health4.png");
+        this.load.image("health3", "assets/Images/Sprites/Health/health3.png");
+        this.load.image("health2", "assets/Images/Sprites/Health/health2.png");
+        this.load.image("health1", "assets/Images/Sprites/Health/health1.png");
+        this.load.image("health0", "assets/Images/Sprites/Health/health0.png");
+        this.load.image("healthStrike", "assets/Images/Sprites/Health/healthStrike.png");
+
+        this.load.image("hurtBox", "assets/Images/Sprites/hurtBox.png");
         this.load.image("gem", "assets/Images/Sprites/gem.png");
         this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
         this.load.image("shop", "assets/Images/Sprites/shop.png");

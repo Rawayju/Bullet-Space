@@ -4,6 +4,7 @@ class SCNplayTestLevel extends Phaser.Scene {
     }
 
     create() {
+        // Background
         this.background = this.add.sprite(config.width / 2,config.height / 2,"background");
         this.background.alpha = 0.8;
         this.background.play("BC", true);
@@ -12,45 +13,51 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.pauseButton = this.add.sprite(15,10,"pauseButton");
         this.pauseButton.setInteractive();
         this.pauseButton.alpha = 0.9;
-        this.moneyDisplay = this.add.bitmapText(25,5,"pix", 8);
-        this.shopIcon = this.add.sprite(16,23,"shop");
         this.pauseButton.depth = 95;
-        this.shopIcon.depth = 96;
+        this.moneyDisplay = this.add.bitmapText(25,5,"pix", 8);
         this.moneyDisplay.depth = 97;
-
-        this.aura = this.physics.add.image(config.width / 2,config.height / 2, "aura").setBlendMode(Phaser.BlendModes.ADD);
-        this.spaceship = this.physics.add.image(config.width / 2,config.height / 2, "spaceship");
-        this.targetAnim = this.add.sprite(this.aura.x * 99,this.aura.y * 99,"aim").setScale(0);
-        this.targetAnim.depth = -1;
-
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.wasd = this.input.keyboard.addKeys("W,A,S,D");
-        this.mouse = this.input.mousePointer;
-
-        this.spaceship.setCollideWorldBounds(true);
-        this.spaceship.lastFired = 0;
-
+        this.shopIcon = this.add.sprite(16,23,"shop");
+        this.shopIcon.depth = 96;
         this.fadeout = this.add.sprite(config.width / 2,config.height / 2,"fadeout").setScale(500).setBlendMode(Phaser.BlendModes.MULTIPLY);
         this.fadeout.depth = 99;
         this.fadeout.play("fadeout", true);
 
-        this.asteroids = this.physics.add.group();
-        this.gems = this.physics.add.group();
-
-        // Bullets group
-        this.bullets = this.add.group();
-        this.bullet = 0;
-        // Add collisions
-        this.physics.add.overlap(this.asteroids, this.bullets, this.bulletHit, null, this);
-        this.physics.add.overlap(this.spaceship, this.gems, this.collectGem, null, this);
-
-        this.input.on('gameobjectdown', this.createTarget, this);
-
-        this.addSounds();
+        // Player
+        this.aura = this.physics.add.image(config.width / 2,config.height / 2, "aura").setBlendMode(Phaser.BlendModes.ADD);
+        this.spaceship = this.physics.add.image(config.width / 2,config.height / 2, "spaceship");
+        this.spaceship.setCollideWorldBounds(true);
+        this.spaceship.lastFired = 0;
+        this.spaceship.health = 12;
         this.spaceship.depth = 50;
         this.spaceship.lastSpawnedBig = 0;
         this.spaceship.lastSpawnedMedium = 0;
         this.spaceship.lastSpawnedSmall = 0;
+        this.hurtBox = this.physics.add.image(this.spaceship.x, this.spaceship.y, "hurtBox");
+        this.hurtBox.a = 0;
+
+        this.targetAnim = this.add.sprite(this.aura.x * 99,this.aura.y * 99,"aim").setScale(0);
+        this.targetAnim.depth = -1;
+        this.target = this.spaceship;
+        
+        // Input
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.wasd = this.input.keyboard.addKeys("W,A,S,D");
+        this.mouse = this.input.mousePointer;
+        this.input.on('gameobjectdown', this.createTarget, this);
+
+        // Groups
+        this.asteroids = this.physics.add.group();
+        this.gems = this.physics.add.group();
+        this.bullets = this.add.group();
+        this.bullet = 0;
+
+        // Collisions
+        this.physics.add.overlap(this.asteroids, this.bullets, this.bulletHit, null, this);
+        this.physics.add.overlap(this.spaceship, this.gems, this.collectGem, null, this);
+        this.physics.add.overlap(this.hurtBox, this.asteroids, this.damageShip, null, this);
+
+        // Variables
+        this.addSoundsHealth();
         this.ewe = 0;
         this.ewe1 = 0;
         this.ewe2 = 0;
@@ -58,29 +65,29 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.speedTick = 0;
         this.spawnRate1 = 150;
         this.spawnRate2 = 500;
-        this.target = this.spaceship;
         this.cosmosTick = 0;
-
         this.bulletTime = 0;  
         this.musicTick = 0;
-
+        this.invencibilidadTick = 0;
+        this.invencibilidad1 = false;
+        this.invencibilidad2 = false;
         this.fireRateLocal = gameSettings.firerate;
         this.fireSpeedLocal = gameSettings.fireSpeed;
         this.a = 0;
         this.aC = 0;
     }
 
-    addSounds() {
+    addSoundsHealth() {
         this.breakAsteroid1 = this.sound.add("breakAsteroid1");
         this.breakAsteroid1medium = this.sound.add("breakAsteroid1medium");
         this.breakAsteroid1small = this.sound.add("breakAsteroid1small");
         this.breakAsteroid2 = this.sound.add("breakAsteroid2");
         this.breakAsteroid2medium = this.sound.add("breakAsteroid2medium");
         this.breakAsteroid2small = this.sound.add("breakAsteroid2small");
-        this.cosmosAmbience1 = this.sound.add("cosmosAmbience1", {volume: 0.5});
-        this.cosmosAmbience2 = this.sound.add("cosmosAmbience2", {volume: 0.5});
-        this.cosmosAmbience3 = this.sound.add("cosmosAmbience3", {volume: 0.5});
-        this.hittingAsteroid = this.sound.add("hittingAsteroid", {volume: 0.5});
+        this.cosmosAmbience1 = this.sound.add("cosmosAmbience1");
+        this.cosmosAmbience2 = this.sound.add("cosmosAmbience2");
+        this.cosmosAmbience3 = this.sound.add("cosmosAmbience3");
+        this.hittingAsteroid = this.sound.add("hittingAsteroid");
         this.menuing = this.sound.add("menuing", {volume: 1.5});
         this.moneyGrab = this.sound.add("moneyGrab");
         this.moving1 = this.sound.add("moving1");
@@ -89,6 +96,7 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.shooting2 = this.sound.add("shooting2", {volume: 0.3});
         this.shooting3 = this.sound.add("shooting3", {volume: 0.3});
         this.shooting4 = this.sound.add("shooting4", {volume: 0.3});
+        this.getHit = this.sound.add("getHit", {volume: 1.5});
 
         this.music = this.sound.add("gameplay");
         var musicConfig = {
@@ -101,28 +109,32 @@ class SCNplayTestLevel extends Phaser.Scene {
             delay: 0       
         }
         this.music.play(musicConfig);
+
+        this.healthBars = this.physics.add.group();
+        this.healthBars[0] = this.add.image(config.width - 38,config.height - 6,"health0").setAlpha(0).setDepth(94);
+        this.healthBars[1] = this.add.image(config.width - 38,config.height - 6,"health1").setAlpha(0).setDepth(94);
+        this.healthBars[2] = this.add.image(config.width - 38,config.height - 6,"health2").setAlpha(0).setDepth(94);
+        this.healthBars[3] = this.add.image(config.width - 38,config.height - 6,"health3").setAlpha(0).setDepth(94);
+        this.healthBars[4] = this.add.image(config.width - 38,config.height - 6,"health4").setAlpha(0).setDepth(94);
+        this.healthBars[5] = this.add.image(config.width - 38,config.height - 6,"health5").setAlpha(0).setDepth(94);
+        this.healthBars[6] = this.add.image(config.width - 38,config.height - 6,"health6").setAlpha(0).setDepth(94);
+        this.healthBars[7] = this.add.image(config.width - 38,config.height - 6,"health7").setAlpha(0).setDepth(94);
+        this.healthBars[8] = this.add.image(config.width - 38,config.height - 6,"health8").setAlpha(0).setDepth(94);
+        this.healthBars[9] = this.add.image(config.width - 38,config.height - 6,"health9").setAlpha(0).setDepth(94);
+        this.healthBars[10] = this.add.image(config.width - 38,config.height - 6,"health10").setAlpha(0).setDepth(94);
+        this.healthBars[11] = this.add.image(config.width - 38,config.height - 6,"health11").setAlpha(0).setDepth(94);
+        this.healthBars[12] = this.add.image(config.width - 38,config.height - 6,"health12").setAlpha(1).setDepth(94);
+        this.healthBars[13] = this.add.image(config.width - 38,config.height - 6,"healthStrike").setAlpha(0).setDepth(94);
     }
 
     update() {
         
         this.music.resume();
 
-        if (this.cosmosTick > 20000) {
-            var random = Phaser.Math.Between(1, 3);
-            if (random === 1) {
-                this.cosmosAmbience1.play();
-            } else if (random === 2) {
-                this.cosmosAmbience2.play();
-            } else if (random === 3) {
-                this.cosmosAmbience3.play();
-            }
-            this.cosmosTick = 0;
-        } else {
-            this.cosmosTick += Phaser.Math.Between(1, 3);
-        }
+        this.randomAmbientNoisesManager();
 
+        // Declare more variables
         this.moneyDisplay.text = gameSettings.money;
-
         var angle = Phaser.Math.Angle.Between(this.spaceship.x,this.spaceship.y,this.mouse.x,this.mouse.y);
         this.a = angle + Math.PI/2;
         var angleClick = Phaser.Math.Angle.Between(this.spaceship.x,this.spaceship.y,this.target.x,this.target.y);
@@ -134,22 +146,31 @@ class SCNplayTestLevel extends Phaser.Scene {
             this.targetAnim.alpha = 0;
         }
 
-        gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
+        // Check for ship's vulnerability
+        if (this.invencibilidad1 === true) {
+            this.invencibilidadTick += 1;
+            if (this.invencibilidadTick > 100) {
+                this.invencibilidadTick = 0;
+                this.spaceship.setTint(0xFFFFFF);
+                this.invencibilidad1 = false;
+            }
+            if (this.invencibilidadTick > 53) {
+                this.healthBars[this.spaceship.health].setTint(0xFFFFFF);
+            }
+        }
 
+        
+        this.invencibilidadTick2 += 1;
+        if(gameSettings.health===true){this.damageShip(this.spaceship, this.asteroids, true);}
         this.moveShip();
-    
-        this.spaceship.lastSpawnedBig += Phaser.Math.Between(0.50, 1.75);
-        this.spaceship.lastSpawnedMedium += Phaser.Math.Between(0.50, 1.75);
-        this.spaceship.lastSpawnedSmall += Phaser.Math.Between(0.50, 1.75);
-
-        this.spaceship.lastFired += 1;
-
         this.createBullet();
         this.createAsteroids();
         this.difficulty();
     }
 
     moveShip() {
+        this.hurtBox.x = this.spaceship.x;
+        this.hurtBox.y = this.spaceship.y;
         this.trail = this.add.sprite(Phaser.Math.Between(this.spaceship.x - 3, this.spaceship.x + 3),Phaser.Math.Between(this.spaceship.y - 3, this.spaceship.y + 3),"trail").setBlendMode(Phaser.BlendModes.ADD);
         this.trail.depth = 1;
         this.trail.play('trail', false)
@@ -243,6 +264,7 @@ class SCNplayTestLevel extends Phaser.Scene {
             
             this.bullet = bulletHolder;
         }
+        this.spaceship.lastFired += 1;
     }
 
     configBullet(bullet, clickTargetting, tint) {
@@ -333,6 +355,36 @@ class SCNplayTestLevel extends Phaser.Scene {
         }
     }
 
+    damageShip(ship, asteroid, health) {
+        if (health === true) {
+            this.spaceship.health = 12;
+            for (var i = 0; i < this.healthBars.getChildren().length; i++) {
+                this.healthBars[i].alpha = 0;
+            }
+            this.healthBars[this.spaceship.health].alpha = 1;
+            gameSettings.health = false;
+        } else {
+            
+            if (this.invencibilidad1 === false) {
+                this.healthBars[this.spaceship.health].alpha = 0;
+                this.getHit.play();
+                this.fadeout.play("fadeout", { frameRate: 180, alpha: 0.5 });
+                if (asteroid.size === "big") {
+                    this.spaceship.health -= 3;    
+                } else if (asteroid.size === "medium") {
+                    this.spaceship.health -= 2;    
+                } else {
+                    this.spaceship.health -= 1;
+                }
+                this.spaceship.setTint(0xFF0000);
+                this.healthBars[this.spaceship.health].alpha = 1;
+                this.healthBars[this.spaceship.health].setTint(0xFF0000);
+                this.invencibilidad1 = true;
+            }
+            ship.a += 1;
+        }
+    }
+
     createTarget(pointer, target) {
         if (target.alpha === 0.9) {
             this.music.pause();
@@ -403,7 +455,29 @@ class SCNplayTestLevel extends Phaser.Scene {
         // console.log(gameSettings.money);
     }
 
+    randomAmbientNoisesManager() {
+        if (this.cosmosTick > 20000) {
+            var random = Phaser.Math.Between(1, 3);
+            if (random === 1) {
+                this.cosmosAmbience1.play();
+            } else if (random === 2) {
+                this.cosmosAmbience2.play();
+            } else if (random === 3) {
+                this.cosmosAmbience3.play();
+            }
+            this.cosmosTick = 0;
+        } else {
+            this.cosmosTick += Phaser.Math.Between(1, 3);
+        }
+    }
+
     difficulty() {
+        gameSettings.asteroidSpawnRate = Phaser.Math.Between(50, 250);
+
+        this.spaceship.lastSpawnedBig += Phaser.Math.Between(0.50, 1.75);
+        this.spaceship.lastSpawnedMedium += Phaser.Math.Between(0.50, 1.75);
+        this.spaceship.lastSpawnedSmall += Phaser.Math.Between(0.50, 1.75);
+
         this.dif += 1;
         this.speedTick += 1;
         if (gameSettings.handicap > 2 && this.dif > gameSettings.levelDifficulty) {

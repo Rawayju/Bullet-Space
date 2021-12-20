@@ -24,10 +24,6 @@ var gameSettings = {
     DMGall: 0,
     DMGallPrice: 400,
     DMGallInteres: 0,
-
-    sold1: false,
-    sold2: false,
-
     firerate: 5,
     fireratePrice: 1890,
     firerateInteres: 0,
@@ -36,7 +32,13 @@ var gameSettings = {
     shiftFireRateInteres: 0,
     fireSpeed: 300,
     fireSpeedPrice: 50,
-    fireSpeedInteres: 0
+    fireSpeedInteres: 0,
+    health: false,
+    healthPrice: 500,
+    healthInteres: 0,
+
+    sold1: false,
+    sold2: false
 }
 
 var config = {
