@@ -43,9 +43,32 @@ class PauseShop extends Phaser.Scene {
         this.fadeout.depth = 99;
         this.fadeout.play("fadeout", true);
 
+        var random = Math.random();
+        if (random < 0.25) {
+            this.tip = this.add.sprite(config.width / 2,config.height / 2,"tip1");
+        } else if (random < 0.50) {
+            this.tip = this.add.sprite(config.width / 2,config.height / 2,"tip2");
+        } else if (random < 0.75) {
+            this.tip = this.add.sprite(config.width / 2,config.height / 2,"tip3");
+        } else {
+            this.tip = this.add.sprite(config.width / 2,config.height / 2,"tip4");
+        }
+
         // sounds
         this.buy = this.sound.add("buy");
+        this.superBuy = this.sound.add("breakAsteroid1small");
         this.menuing = this.sound.add("menuing");
+        this.shop = this.sound.add("shop", {volume: 2});
+        var musicConfig = {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0       
+        }
+        this.shop.play(musicConfig);
 
         this.returnButton.on('pointerdown', function (pointer) {
             this.click = true;
@@ -75,6 +98,7 @@ class PauseShop extends Phaser.Scene {
 
     update() {
         if (this.returnButton.click === true) {
+            this.shop.pause();
             this.scene.resume('playTestLevel');
             this.scene.stop();
         }
@@ -161,12 +185,14 @@ class PauseShop extends Phaser.Scene {
                     if (gameSettings.fireratePrice > 2000) {
                         gameDMGPrice = 0;
                         gameSettings.sold1 = true;
+                        this.superBuy.play();
                     }
                     gameDMG -= 1;    
                 } else if (size === "shiftFireRate" && DMG.alpha != 0) {
                     if (gameSettings.shiftFireRatePrice > 1600) {
                         gameDMGPrice = 0;
                         gameSettings.sold2 = true;
+                        this.superBuy.play();
                     }
                     gameDMG += 1;    
                 } else if (size === "firespeed") {
