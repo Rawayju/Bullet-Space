@@ -11,7 +11,7 @@ var gameSettings = {
     asteroidSpeedBoost: 0, // To do
     handicap: 100, // The less the harder
 
-    money: 0,
+    money: 999990,
     DMGsmall: 0,
     DMGsmallPrice: 250,
     DMGsmallInteres: 0,
@@ -25,11 +25,14 @@ var gameSettings = {
     DMGallPrice: 400,
     DMGallInteres: 0,
 
+    sold1: false,
+    sold2: false,
+
     firerate: 5,
-    fireratePrice: 180,
+    fireratePrice: 1890,
     firerateInteres: 0,
     shiftFireRate: 1,
-    shiftFireRatePrice: 120,
+    shiftFireRatePrice: 1200,
     shiftFireRateInteres: 0,
     fireSpeed: 300,
     fireSpeedPrice: 50,

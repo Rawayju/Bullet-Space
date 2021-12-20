@@ -54,8 +54,10 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
 
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
-        this.health = 18 * 3;
         this.setInteractive();
+        this.health = 18 * 3;
+        this.breakAsteroid1 = scene.breakAsteroid1small;
+        this.breakAsteroid2 = scene.breakAsteroid2small;
     }
 
     update(no, nope, all) {
@@ -63,6 +65,11 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
         this.health -= 1;
         if (this.health <= 0) {
             this.alpha = 0.0000000001;
+            if (Math.random() > 0.5) {
+                this.breakAsteroid1.play();
+            } else {
+                this.breakAsteroid2.play();
+            }
             this.destroy();
         }
     }

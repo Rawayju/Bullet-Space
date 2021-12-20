@@ -8,7 +8,6 @@ class PauseShop extends Phaser.Scene {
         this.returnButton = this.add.sprite(config.width - 10,10,"returnButton").setInteractive();
 
         this.moneyDisplay = this.add.bitmapText(83,54,"pix", 8);
-        this.moneyDisplay.text = gameSettings.money;
 
         this.DMGsmall = this.add.sprite(90,80,"button");
         this.DMGsmall.setInteractive();
@@ -44,6 +43,10 @@ class PauseShop extends Phaser.Scene {
         this.fadeout.depth = 99;
         this.fadeout.play("fadeout", true);
 
+        // sounds
+        this.buy = this.sound.add("buy");
+        this.menuing = this.sound.add("menuing");
+
         this.returnButton.on('pointerdown', function (pointer) {
             this.click = true;
         });
@@ -76,6 +79,14 @@ class PauseShop extends Phaser.Scene {
             this.scene.stop();
         }
 
+        if (gameSettings.sold1 === true) {
+            this.firerate.setAlpha(0);
+            this.firerateText.text = 0;
+        }
+        if (gameSettings.sold2 === true) {
+            this.firerateShift.setAlpha(0);
+            this.firerateShiftText.text = 0;
+        }
         this.DMGpurchase("big");
         this.DMGpurchase("medium");
         this.DMGpurchase("small");
@@ -83,6 +94,7 @@ class PauseShop extends Phaser.Scene {
         this.DMGpurchase("shiftFireRate");
         this.DMGpurchase("firerate");
         this.DMGpurchase("firespeed");
+        this.moneyDisplay.text = gameSettings.money;
     }
 
     DMGpurchase(size) {
@@ -135,6 +147,7 @@ class PauseShop extends Phaser.Scene {
         if (DMG.click === true) {
             if (gameSettings.money < gameDMGPrice) {
                 DMG.setTint(0xFF0000); 
+                this.menuing.play();
                 if (DMG.timer > 20) {
                     DMG.setTint(0xFFFFFF);
                     DMG.timer = 0;
@@ -144,16 +157,16 @@ class PauseShop extends Phaser.Scene {
             } else {
                 DMG.play("buttonPress");
                 gameSettings.money = Phaser.Math.RoundTo(gameSettings.money - gameDMGPrice, 0);
-                if (size === "firerate") {
+                if (size === "firerate" && DMG.alpha != 0) {
                     if (gameSettings.fireratePrice > 2000) {
                         gameDMGPrice = 0;
-                        DMG.destroy();
+                        gameSettings.sold1 = true;
                     }
                     gameDMG -= 1;    
-                } else if (size === "shiftFireRate") {
+                } else if (size === "shiftFireRate" && DMG.alpha != 0) {
                     if (gameSettings.shiftFireRatePrice > 1600) {
                         gameDMGPrice = 0;
-                        DMG.destroy();
+                        gameSettings.sold2 = true;
                     }
                     gameDMG += 1;    
                 } else if (size === "firespeed") {
@@ -161,6 +174,7 @@ class PauseShop extends Phaser.Scene {
                 } else {
                     gameDMG += 1;
                 }
+                this.buy.play();
                 DMG.click = false;
                 gameDMGInteres += 0.05;
                 gameDMGPrice = Phaser.Math.RoundTo(gameDMGPrice * (1.50 + gameDMGInteres), 0);

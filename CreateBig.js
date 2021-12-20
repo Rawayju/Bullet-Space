@@ -45,14 +45,21 @@ class CreateBig extends Phaser.GameObjects.Sprite {
         this.body.setBounce(1);
         this.setInteractive();
         this.health = 208 * 2;
+        this.breakAsteroid1 = scene.breakAsteroid1;
+        this.breakAsteroid2 = scene.breakAsteroid2;
     }
 
     update(all, no, nope) {
-        // console.log(all);
         this.health -= all;
         this.health -= 1;
         if (this.health <= 0) {
             this.alpha = 0;
+            if (Math.random() > 0.5) {
+                this.breakAsteroid1.play();
+            } else {
+                this.breakAsteroid2.play();
+            }
+            this.destroy();
         }
     }
 }

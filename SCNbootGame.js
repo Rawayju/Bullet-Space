@@ -4,9 +4,60 @@ class SCNbootGame extends Phaser.Scene {
     }
 
     preload() {
-
+        // bitmap
         this.load.bitmapFont("pix", "assets/bitmap/j_0.png", "assets/bitmap/j.xml")
         
+        // sound files
+        this.load.audio("breakAsteroid1", ["assets/sound/effects/breakAsteroid1.ogg", "assets/sound/effects/breakAsteroid1.mp3"]);
+        this.load.audio("breakAsteroid1medium", ["assets/sound/effects/breakAsteroid1medium.ogg", "assets/sound/effects/breakAsteroid1medium.mp3"]);
+        this.load.audio("breakAsteroid1small", ["assets/sound/effects/breakAsteroid1small.ogg", "assets/sound/effects/breakAsteroid1small.mp3"]);
+        this.load.audio("breakAsteroid2", ["assets/sound/effects/breakAsteroid2.ogg", "assets/sound/effects/breakAsteroid2.mp3"]);
+        this.load.audio("breakAsteroid2medium", ["assets/sound/effects/breakAsteroid2medium.ogg", "assets/sound/effects/breakAsteroid2medium.mp3"]);
+        this.load.audio("breakAsteroid2small", ["assets/sound/effects/breakAsteroid2small.ogg", "assets/sound/effects/breakAsteroid2small.mp3"]);
+        this.load.audio("buy", ["assets/sound/effects/buy.ogg", "assets/sound/effects/buy.mp3"]);
+        this.load.audio("cosmosAmbience1", ["assets/sound/effects/cosmosAmbience1.ogg", "assets/sound/effects/cosmosAmbience1.mp3"]);
+        this.load.audio("cosmosAmbience2", ["assets/sound/effects/cosmosAmbience2.ogg", "assets/sound/effects/cosmosAmbience2.mp3"]);
+        this.load.audio("cosmosAmbience3", ["assets/sound/effects/cosmosAmbience3.ogg", "assets/sound/effects/cosmosAmbience3.mp3"]);
+        this.load.audio("death1", ["assets/sound/effects/death1.ogg", "assets/sound/effects/death1.mp3"]);
+        this.load.audio("death2", ["assets/sound/effects/death2.ogg", "assets/sound/effects/death2.mp3"]);
+        this.load.audio("getHit", ["assets/sound/effects/getHit.ogg", "assets/sound/effects/getHit.mp3"]);
+        this.load.audio("hitFoR", ["assets/sound/effects/hitFoR.ogg", "assets/sound/effects/hitFoR.mp3"]);
+        this.load.audio("hittingAsteroid", ["assets/sound/effects/hittingAsteroid.ogg", "assets/sound/effects/hittingAsteroid.mp3"]);
+        this.load.audio("lightSpeed", ["assets/sound/effects/lightSpeed.ogg", "assets/sound/effects/lightSpeed.mp3"]);
+        this.load.audio("menuing", ["assets/sound/effects/menuing.ogg", "assets/sound/effects/menuing.mp3"]);
+        this.load.audio("moneyGrab", ["assets/sound/effects/moneyGrab.ogg", "assets/sound/effects/moneyGrab.mp3"]);
+        this.load.audio("moving1", ["assets/sound/effects/moving.ogg", "assets/sound/effects/moving.mp3"]);
+        this.load.audio("moving2", ["assets/sound/effects/moving2.ogg", "assets/sound/effects/moving2.mp3"]);
+        this.load.audio("shooting1", ["assets/sound/effects/shooting1.ogg", "assets/sound/effects/shooting1.mp3"]);
+        this.load.audio("shooting2", ["assets/sound/effects/shooting2.ogg", "assets/sound/effects/shooting2.mp3"]);
+        this.load.audio("shooting3", ["assets/sound/effects/shooting3.ogg", "assets/sound/effects/shooting3.mp3"]);
+        this.load.audio("shooting4", ["assets/sound/effects/shooting4.ogg", "assets/sound/effects/shooting4.mp3"]);
+        this.load.audio("speak1", ["assets/sound/effects/speak1.ogg", "assets/sound/effects/speak1.mp3"]);
+        this.load.audio("speak2", ["assets/sound/effects/speak2.ogg", "assets/sound/effects/speak2.mp3"]);
+        this.load.audio("speak3", ["assets/sound/effects/speak3.ogg", "assets/sound/effects/speak3.mp3"]);
+        this.load.audio("whiteNoise", ["assets/sound/effects/whiteNoise.ogg", "assets/sound/effects/whiteNoise.mp3"]);
+
+        this.load.audio("cutscene", ["assets/sound/music/cutscene.ogg", "assets/sound/music/cutscene.mp3"]);
+        this.load.audio("gameplay", ["assets/sound/music/gameplay.ogg", "assets/sound/music/gameplay.mp3"]);
+        this.load.audio("shop", ["assets/sound/music/shop.ogg", "assets/sound/music/shop.mp3"]);
+        
+        // images
+        this.load.image("gem", "assets/Images/Sprites/gem.png");
+        this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
+        this.load.image("shop", "assets/Images/Sprites/shop.png");
+        this.load.image("sCover", "assets/Images/Sprites/screenCover.png");
+        this.load.image("sCover2", "assets/Images/Sprites/screenCover2.png");
+        this.load.image("mCover", "assets/Images/Sprites/multiplyCover.png");
+        this.load.image("spaceship", "assets/Images/Sprites/shipSmall.png");
+        this.load.image("aura", "assets/Images/Sprites/spaceshipAura.png");
+        this.load.image("bullet", "assets/Images/Sprites/bullet.png");
+        this.load.image("ASTbig", "assets/Images/Sprites/ASTbig.png");
+        this.load.image("pauseButton", "assets/Images/Sprites/Pause Screen/pauseButton.png");
+        this.load.image("returnButton", "assets/Images/Sprites/Pause Screen/returnButton.png");
+        this.load.image("pauseScreen", "assets/Images/Sprites/Pause Screen/pauseScreen.png");
+        this.load.image("button", "assets/Images/Sprites/Pause Screen/button.png");
+
+        // sprite sheets
         this.load.spritesheet("spacen", "assets/Images/SpriteSheets/Spacen.png", {
             frameWidth: 50,
             frameHeight: 50
@@ -23,16 +74,6 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 247,
             frameHeight: 157
         });
-        this.load.image("gem", "assets/Images/Sprites/gem.png");
-        this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
-        this.load.image("shop", "assets/Images/Sprites/shop.png");
-        this.load.image("sCover", "assets/Images/Sprites/screenCover.png");
-        this.load.image("sCover2", "assets/Images/Sprites/screenCover2.png");
-        this.load.image("mCover", "assets/Images/Sprites/multiplyCover.png");
-        this.load.image("spaceship", "assets/Images/Sprites/shipSmall.png");
-        this.load.image("aura", "assets/Images/Sprites/spaceshipAura.png");
-        this.load.image("bullet", "assets/Images/Sprites/bullet.png");
-        this.load.image("ASTbig", "assets/Images/Sprites/ASTbig.png");
         this.load.spritesheet("ASTmedium", "assets/Images/SpriteSheets/ASTmedium.png", {
             frameWidth: 20,
             frameHeight: 20
@@ -41,7 +82,6 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 10,
             frameHeight: 10
         });
-
         this.load.spritesheet("aim", "assets/Images/SpriteSheets/bulletAim.png", {
             frameWidth: 38,
             frameHeight: 38
@@ -50,16 +90,10 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 5,
             frameHeight: 5
         });
-
         this.load.spritesheet("trail", "assets/Images/SpriteSheets/trail.png", {
             frameWidth: 11,
             frameHeight: 11
         });
-
-        this.load.image("pauseButton", "assets/Images/Sprites/Pause Screen/pauseButton.png");
-        this.load.image("returnButton", "assets/Images/Sprites/Pause Screen/returnButton.png");
-        this.load.image("pauseScreen", "assets/Images/Sprites/Pause Screen/pauseScreen.png");
-        this.load.image("button", "assets/Images/Sprites/Pause Screen/button.png");
         this.load.spritesheet("buttonAnim", "assets/Images/Sprites/Pause Screen/buttonPress.png", {
             frameWidth: 9,
             frameHeight: 9
@@ -69,6 +103,7 @@ class SCNbootGame extends Phaser.Scene {
     create() {
         this.add.text(20, 20, "Loading game...");
         
+        // create animations
         this.anims.create({
             key: "buttonPress",
             frames: this.anims.generateFrameNumbers("buttonAnim"),

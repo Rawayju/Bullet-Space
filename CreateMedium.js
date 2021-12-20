@@ -62,8 +62,10 @@ class CreateMedium extends Phaser.GameObjects.Sprite {
         
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1);
-        this.health = 52 * 2;
         this.setInteractive();
+        this.health = 52 * 2;
+        this.breakAsteroid1 = scene.breakAsteroid1medium;
+        this.breakAsteroid2 = scene.breakAsteroid2medium;
     }
 
     update(no, all, nope) {
@@ -72,6 +74,11 @@ class CreateMedium extends Phaser.GameObjects.Sprite {
         this.health -= 1;
         if (this.health <= 0) {
             this.alpha = 0.000001;
+            if (Math.random() > 0.5) {
+                this.breakAsteroid1.play();
+            } else {
+                this.breakAsteroid2.play();
+            }
             this.destroy();
         }
     }
