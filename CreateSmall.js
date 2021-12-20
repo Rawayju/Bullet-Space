@@ -56,6 +56,7 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
         this.body.setBounce(1);
         this.setInteractive();
         this.health = 18 * 3;
+        this.size = "small";
         this.breakAsteroid1 = scene.breakAsteroid1small;
         this.breakAsteroid2 = scene.breakAsteroid2small;
     }

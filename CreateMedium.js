@@ -64,6 +64,7 @@ class CreateMedium extends Phaser.GameObjects.Sprite {
         this.body.setBounce(1);
         this.setInteractive();
         this.health = 52 * 2;
+        this.size = "medium";
         this.breakAsteroid1 = scene.breakAsteroid1medium;
         this.breakAsteroid2 = scene.breakAsteroid2medium;
     }
