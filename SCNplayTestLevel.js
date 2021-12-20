@@ -13,7 +13,9 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.pauseButton.setInteractive();
         this.pauseButton.alpha = 0.9;
         this.moneyDisplay = this.add.bitmapText(25,5,"pix", 8);
-        this.add.sprite(16,23,"shop");
+        this.shopIcon = this.add.sprite(16,23,"shop");
+        this.pauseButton.depth = 95;
+        this.shopIcon.depth = 96;
         this.moneyDisplay.depth = 97;
 
         this.aura = this.physics.add.image(config.width / 2,config.height / 2, "aura").setBlendMode(Phaser.BlendModes.ADD);
@@ -79,7 +81,7 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.cosmosAmbience2 = this.sound.add("cosmosAmbience2", {volume: 0.5});
         this.cosmosAmbience3 = this.sound.add("cosmosAmbience3", {volume: 0.5});
         this.hittingAsteroid = this.sound.add("hittingAsteroid", {volume: 0.5});
-        this.menuing = this.sound.add("menuing");
+        this.menuing = this.sound.add("menuing", {volume: 1.5});
         this.moneyGrab = this.sound.add("moneyGrab");
         this.moving1 = this.sound.add("moving1");
         this.moving2 = this.sound.add("moving2");
@@ -89,14 +91,22 @@ class SCNplayTestLevel extends Phaser.Scene {
         this.shooting4 = this.sound.add("shooting4", {volume: 0.3});
 
         this.music = this.sound.add("gameplay");
+        var musicConfig = {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0       
+        }
+        this.music.play(musicConfig);
     }
 
     update() {
-        if (this.musicTick === 0) {
-            this.music.play();
-            this.musicTick = 1;
-        }
         
+        this.music.resume();
+
         if (this.cosmosTick > 20000) {
             var random = Phaser.Math.Between(1, 3);
             if (random === 1) {
@@ -211,7 +221,16 @@ class SCNplayTestLevel extends Phaser.Scene {
                     }
                     this.bulletTime += 1;
                     if (this.bulletTime > 2){
-                        this.shooting4.play();
+                        var random = Math.random();
+                        if (random < 0.25) {
+                            this.shooting1.play();
+                        } else if (random < 0.50) {
+                            this.shooting2.play();
+                        } else if (random < 0.75) {
+                            this.shooting3.play();
+                        } else {
+                            this.shooting4.play();
+                        }
                         this.bulletTime = 0;    
                     }
                 }
@@ -316,6 +335,7 @@ class SCNplayTestLevel extends Phaser.Scene {
 
     createTarget(pointer, target) {
         if (target.alpha === 0.9) {
+            this.music.pause();
             this.scene.launch('pauseShop')
             this.scene.pause();
         } else {

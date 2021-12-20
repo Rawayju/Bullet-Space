@@ -42,6 +42,10 @@ class SCNbootGame extends Phaser.Scene {
         this.load.audio("shop", ["assets/sound/music/shop.ogg", "assets/sound/music/shop.mp3"]);
         
         // images
+        this.load.image("tip1", "assets/Images/Sprites/Pause Screen/tip1.png");
+        this.load.image("tip2", "assets/Images/Sprites/Pause Screen/tip2.png");
+        this.load.image("tip3", "assets/Images/Sprites/Pause Screen/tip3.png");
+        this.load.image("tip4", "assets/Images/Sprites/Pause Screen/tip4.png");
         this.load.image("gem", "assets/Images/Sprites/gem.png");
         this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
         this.load.image("shop", "assets/Images/Sprites/shop.png");
