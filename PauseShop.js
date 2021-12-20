@@ -26,23 +26,28 @@ class PauseShop extends Phaser.Scene {
         this.DMGall.timer = 0;
         this.DMGallText = this.add.bitmapText((config.width / 2) + 18,124,"pix", 8);
 
-        this.firerate = this.add.sprite(185,69,"button");
-        this.firerate.setInteractive();
-        this.firerate.timer = 0;
-        this.firerateText = this.add.bitmapText(192,66,"pix", 7);
         this.firerateShift = this.add.sprite((config.width / 2) + 10,118,"button");
         this.firerateShift.setInteractive();
         this.firerateShift.timer = 0;
         this.firerateShiftText = this.add.bitmapText((config.width / 2) + 18,115,"pix", 7);
+        this.firerate = this.add.sprite(185,69,"button");
+        this.firerate.setInteractive();
+        this.firerate.timer = 0;
+        this.firerateText = this.add.bitmapText(192,66,"pix", 7);
         this.fireSpeed = this.add.sprite(185,78,"button");
         this.fireSpeed.setInteractive();
         this.fireSpeed.timer = 0;
         this.fireSpeedText = this.add.bitmapText(192,75,"pix", 7);
+        this.health = this.add.sprite(185,87,"button");
+        this.health.setInteractive();
+        this.health.timer = 0;
+        this.healthText = this.add.bitmapText(192,84,"pix", 7);
 
         this.fadeout = this.add.sprite(config.width / 2,config.height / 2,"fadeout").setScale(500).setBlendMode(Phaser.BlendModes.MULTIPLY);
         this.fadeout.depth = 99;
         this.fadeout.play("fadeout", true);
 
+        // Tips
         var random = Math.random();
         if (random < 0.25) {
             this.tip = this.add.sprite(config.width / 2,config.height / 2,"tip1");
@@ -54,7 +59,7 @@ class PauseShop extends Phaser.Scene {
             this.tip = this.add.sprite(config.width / 2,config.height / 2,"tip4");
         }
 
-        // sounds
+        // Sounds
         this.buy = this.sound.add("buy");
         this.superBuy = this.sound.add("breakAsteroid1small");
         this.menuing = this.sound.add("menuing");
@@ -94,6 +99,9 @@ class PauseShop extends Phaser.Scene {
         this.firerateShift.on('pointerdown', function (pointer) {
             this.click = true;
         });
+        this.health.on('pointerdown', function (pointer) {
+            this.click = true;
+        });
     }
 
     update() {
@@ -118,6 +126,7 @@ class PauseShop extends Phaser.Scene {
         this.DMGpurchase("shiftFireRate");
         this.DMGpurchase("firerate");
         this.DMGpurchase("firespeed");
+        this.DMGpurchase("health");
         this.moneyDisplay.text = gameSettings.money;
     }
 
@@ -159,6 +168,12 @@ class PauseShop extends Phaser.Scene {
             var gameDMGPrice = gameSettings.fireSpeedPrice;
             this.fireSpeedText.text = gameDMGPrice;
             var gameDMGInteres = gameSettings.fireSpeedInteres;
+        } else if (size === "health") {
+            var DMG = this.health;
+            var gameDMG = gameSettings.health;
+            var gameDMGPrice = gameSettings.healthPrice;
+            this.healthText.text = gameDMGPrice;
+            var gameDMGInteres = gameSettings.healthInteres;
 
         } else {
             var DMG = this.DMGall;
@@ -196,7 +211,12 @@ class PauseShop extends Phaser.Scene {
                     }
                     gameDMG += 1;    
                 } else if (size === "firespeed") {
-                    gameDMG += 50;    
+                    gameDMG += 50;  
+                } else if (size === "health") {
+                    gameDMG = true; 
+                    DMG.destroy();
+                    this.healthText.setAlpha(0);
+                    this.superBuy.play();
                 } else {
                     gameDMG += 1;
                 }
@@ -232,6 +252,10 @@ class PauseShop extends Phaser.Scene {
             gameSettings.fireSpeed = gameDMG;
             gameSettings.fireSpeedPrice = gameDMGPrice;
             gameSettings.fireSpeedInteres = gameDMGInteres;
+        } else if (size === "health") {
+            gameSettings.health = gameDMG;
+            gameSettings.healthPrice = gameDMGPrice;
+            gameSettings.healthInteres = gameDMGInteres;
 
         } else {
             gameSettings.DMGall = gameDMG;
