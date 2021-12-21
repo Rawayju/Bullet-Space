@@ -45,7 +45,7 @@ var config = {
     type: Phaser.AUTO,
     width: 246,
     height: 156,
-    scene: [SCNbootGame, SCNstartTestLevel, SCNplayTestLevel, PauseShop],
+    scene: [SCNbootGame, SCNpreStartLevel, SCNstartLevel, SCNplayLevel, PauseShop, SCNendLevel],
     pixelArt: true,
     render: {
         antialias: true,
