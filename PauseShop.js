@@ -107,7 +107,7 @@ class PauseShop extends Phaser.Scene {
     update() {
         if (this.returnButton.click === true) {
             this.shop.pause();
-            this.scene.resume('playTestLevel');
+            this.scene.resume('playLevel');
             this.scene.stop();
         }
 

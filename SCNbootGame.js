@@ -62,6 +62,7 @@ class SCNbootGame extends Phaser.Scene {
         this.load.image("health0", "assets/Images/Sprites/Health/health0.png");
         this.load.image("healthStrike", "assets/Images/Sprites/Health/healthStrike.png");
 
+        this.load.image("introduction", "assets/Images/Sprites/introduction.png");
         this.load.image("hurtBox", "assets/Images/Sprites/hurtBox.png");
         this.load.image("gem", "assets/Images/Sprites/gem.png");
         this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
@@ -232,6 +233,6 @@ class SCNbootGame extends Phaser.Scene {
             repeat: -1
         });
 
-        this.scene.start("startTestLevel");
+        this.scene.start("preStartLevel");
     }
 }
