@@ -180,7 +180,7 @@ class SCNstartLevel extends Phaser.Scene {
     }
 
     update() {
-        if (this.background.ewe > 2400) {
+        if (this.background.ewe > 2500) {
             this.scene.start("playLevel");
             this.music.stop();
         } else {

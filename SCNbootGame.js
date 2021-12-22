@@ -37,6 +37,7 @@ class SCNbootGame extends Phaser.Scene {
         this.load.audio("speak3", ["assets/sound/effects/speak3.ogg", "assets/sound/effects/speak3.mp3"]);
         this.load.audio("whiteNoise", ["assets/sound/effects/whiteNoise.ogg", "assets/sound/effects/whiteNoise.mp3"]);
 
+        this.load.audio("titleScreen", ["assets/sound/music/titleScreen.ogg", "assets/sound/music/titleScreen.mp3"]);
         this.load.audio("cutscene", ["assets/sound/music/cutscene.ogg", "assets/sound/music/cutscene.mp3"]);
         this.load.audio("gameplay", ["assets/sound/music/gameplay.ogg", "assets/sound/music/gameplay.mp3"]);
         this.load.audio("shop", ["assets/sound/music/shop.ogg", "assets/sound/music/shop.mp3"]);
@@ -62,7 +63,10 @@ class SCNbootGame extends Phaser.Scene {
         this.load.image("health0", "assets/Images/Sprites/Health/health0.png");
         this.load.image("healthStrike", "assets/Images/Sprites/Health/healthStrike.png");
 
+        this.load.image("click", "assets/Images/Sprites/click.png");
         this.load.image("introduction", "assets/Images/Sprites/introduction.png");
+        this.load.image("titleScreen", "assets/Images/Sprites/titleScreen.png");
+        this.load.image("titleScreen2", "assets/Images/Sprites/title.png");
         this.load.image("hurtBox", "assets/Images/Sprites/hurtBox.png");
         this.load.image("gem", "assets/Images/Sprites/gem.png");
         this.load.image("gemBig", "assets/Images/Sprites/gemBig.png");
@@ -78,9 +82,14 @@ class SCNbootGame extends Phaser.Scene {
         this.load.image("returnButton", "assets/Images/Sprites/Pause Screen/returnButton.png");
         this.load.image("pauseScreen", "assets/Images/Sprites/Pause Screen/pauseScreen.png");
         this.load.image("button", "assets/Images/Sprites/Pause Screen/button.png");
+        this.load.image("die", "assets/Images/Sprites/die.png");
 
         // sprite sheets
         this.load.spritesheet("spacen", "assets/Images/SpriteSheets/Spacen.png", {
+            frameWidth: 50,
+            frameHeight: 50
+        });
+        this.load.spritesheet("spacen2", "assets/Images/SpriteSheets/Spacen2.png", {
             frameWidth: 50,
             frameHeight: 50
         });
@@ -120,6 +129,10 @@ class SCNbootGame extends Phaser.Scene {
             frameWidth: 9,
             frameHeight: 9
         });
+        this.load.spritesheet("shipExplode", "assets/Images/SpriteSheets/shipExplode.png", {
+            frameWidth: 25,
+            frameHeight: 25
+        });
     }
 
     create() {
@@ -149,6 +162,12 @@ class SCNbootGame extends Phaser.Scene {
             frameRate: 14,
             hideOnComplete: true
         });
+        this.anims.create({
+            key: "shipExplode",
+            frames: this.anims.generateFrameNumbers("shipExplode"),
+            frameRate: 14,
+            hideOnComplete: true
+        });
 
         this.anims.create({
             key: "trail",
@@ -172,6 +191,23 @@ class SCNbootGame extends Phaser.Scene {
         this.anims.create({
             key: "ryoukai",
             frames: this.anims.generateFrameNumbers("spacen", { start: 12, end: 16 }),
+            frameRate: 8,
+        });
+        this.anims.create({
+            key: "jamming2",
+            frames: this.anims.generateFrameNumbers("spacen2", { start: 0, end: 5 }),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "idle2",
+            frames: this.anims.generateFrameNumbers("spacen2", { start: 6, end: 8 }),
+            frameRate: 4,
+            repeat: -1
+        });
+        this.anims.create({
+            key: "ryoukai2",
+            frames: this.anims.generateFrameNumbers("spacen2", { start: 12, end: 16 }),
             frameRate: 8,
         });
 

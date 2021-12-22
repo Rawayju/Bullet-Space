@@ -201,6 +201,7 @@ class PauseShop extends Phaser.Scene {
                         gameDMGPrice = 0;
                         gameSettings.sold1 = true;
                         this.superBuy.play();
+                        gameDMGInteres += 1.05;
                     }
                     gameDMG -= 1;    
                 } else if (size === "shiftFireRate" && DMG.alpha != 0) {
@@ -208,6 +209,7 @@ class PauseShop extends Phaser.Scene {
                         gameDMGPrice = 0;
                         gameSettings.sold2 = true;
                         this.superBuy.play();
+                        gameDMGInteres += 1.05;
                     }
                     gameDMG += 1;    
                 } else if (size === "firespeed") {
@@ -217,13 +219,14 @@ class PauseShop extends Phaser.Scene {
                     DMG.destroy();
                     this.healthText.setAlpha(0);
                     this.superBuy.play();
+                    gameDMGInteres += 1.05;
                 } else {
                     gameDMG += 1;
                 }
                 this.buy.play();
                 DMG.click = false;
-                gameDMGInteres += 0.05;
-                gameDMGPrice = Phaser.Math.RoundTo(gameDMGPrice * (1.50 + gameDMGInteres), 0);
+                gameDMGInteres += 0.10;
+                gameDMGPrice = Phaser.Math.RoundTo(gameDMGPrice * (1.75 + gameDMGInteres), 0);
             }
         }
 

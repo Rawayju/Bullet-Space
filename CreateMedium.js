@@ -80,6 +80,7 @@ class CreateMedium extends Phaser.GameObjects.Sprite {
             } else {
                 this.breakAsteroid2.play();
             }
+            gameSettings.score += 70;
             this.destroy();
         }
     }

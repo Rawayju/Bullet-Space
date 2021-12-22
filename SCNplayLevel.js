@@ -377,12 +377,15 @@ class SCNplayLevel extends Phaser.Scene {
                 }
                 if (this.spaceship.health < 1) {
                     this.scene.start("endLevel");
+                    this.music.stop();
+                    this.scene.stop("playLevel");
+                } else {
+                    this.spaceship.setTint(0xFF0000);
+                    console.log(this.spaceship.health)
+                    this.healthBars[this.spaceship.health].alpha = 1;
+                    this.healthBars[this.spaceship.health].setTint(0xFF0000);
+                    this.invencibilidad1 = true;
                 }
-                this.spaceship.setTint(0xFF0000);
-                console.log(this.spaceship.health)
-                this.healthBars[this.spaceship.health].alpha = 1;
-                this.healthBars[this.spaceship.health].setTint(0xFF0000);
-                this.invencibilidad1 = true;
             }
             ship.a += 1;
         }
@@ -448,9 +451,11 @@ class SCNplayLevel extends Phaser.Scene {
     collectGem(ship, gem) {
         
         if (gem.alpha === 0.9999) {
-            gameSettings.money += 75;
+            gameSettings.money += 97;
+            gameSettings.score += 97;
         } else {
-            gameSettings.money += 172;
+            gameSettings.money += 45;
+            gameSettings.score += 45;
         }
 
         gem.destroy();
@@ -484,7 +489,10 @@ class SCNplayLevel extends Phaser.Scene {
         this.dif += 1;
         this.speedTick += 1;
         if (gameSettings.handicap > 2 && this.dif > gameSettings.levelDifficulty) {
-            if (gameSettings.levelDifficulty > 200) {
+            if (gameSettings.levelDifficulty > 1200) {
+                gameSettings.handicap -= 3;
+                this.dif = 0;
+            } else if (gameSettings.levelDifficulty > 600) {
                 gameSettings.handicap -= 2;
                 this.dif = 0;
             } else {
@@ -494,18 +502,16 @@ class SCNplayLevel extends Phaser.Scene {
         }
 
         if (gameSettings.asteroidSpawnRate > 2 && this.dif > gameSettings.levelDifficulty) {
-            if (gameSettings.levelDifficulty > 200) {
+            if (gameSettings.levelDifficulty > 1200) {
+                gameSettings.asteroidSpawnRate -= 3;
+                this.dif = 0;
+            } else if (gameSettings.levelDifficulty > 600) {
                 gameSettings.asteroidSpawnRate -= 2;
                 this.dif = 0;
             } else {
                 gameSettings.asteroidSpawnRate -= 1;
                 this.dif = 0;
             }
-        }
-
-        if (this.speedTick > gameSettings.levelDifficulty * 4) {
-            gameSettings.asteroidSpeedBoost += 1;
-            this.speedTick = 0;
         }
     }
 }

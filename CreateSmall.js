@@ -71,6 +71,7 @@ class CreateSmall extends Phaser.GameObjects.Sprite {
             } else {
                 this.breakAsteroid2.play();
             }
+            gameSettings.score += 30;
             this.destroy();
         }
     }

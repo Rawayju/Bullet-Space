@@ -60,6 +60,7 @@ class CreateBig extends Phaser.GameObjects.Sprite {
             } else {
                 this.breakAsteroid2.play();
             }
+            gameSettings.score += 150;
             this.destroy();
         }
     }
