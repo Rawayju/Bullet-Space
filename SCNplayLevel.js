@@ -363,29 +363,28 @@ class SCNplayLevel extends Phaser.Scene {
             this.healthBars[this.spaceship.health].alpha = 1;
             gameSettings.health = false;
         } else {
-            
             if (this.invencibilidad1 === false) {
-                this.healthBars[this.spaceship.health].alpha = 0;
-                this.getHit.play();
-                this.fadeout.play("fadeout", { frameRate: 180, alpha: 0.5 });
-                if (asteroid.size === "big") {
-                    this.spaceship.health -= 3;    
-                } else if (asteroid.size === "medium") {
-                    this.spaceship.health -= 2;    
-                } else {
-                    this.spaceship.health -= 1;
+                if (this.spaceship.health > 0 && this.spaceship.health < 13) {
+                    this.healthBars[this.spaceship.health].alpha = 0;
                 }
-                if (this.spaceship.health < 1) {
+                if (asteroid.size === "big" && this.spaceship.health > 3) {
+                    this.spaceship.health -= 3;    
+                } else if (asteroid.size === "medium" && this.spaceship.health > 2) {
+                    this.spaceship.health -= 2;    
+                } else if (asteroid.size === "small" && this.spaceship.health > 1) {
+                    this.spaceship.health -= 1;
+                } else {
                     this.scene.start("endLevel");
                     this.music.stop();
                     this.scene.stop("playLevel");
-                } else {
-                    this.spaceship.setTint(0xFF0000);
-                    console.log(this.spaceship.health)
-                    this.healthBars[this.spaceship.health].alpha = 1;
-                    this.healthBars[this.spaceship.health].setTint(0xFF0000);
-                    this.invencibilidad1 = true;
                 }
+                this.getHit.play();
+                this.fadeout.play("fadeout", { frameRate: 180, alpha: 0.5 });
+                this.spaceship.setTint(0xFF0000);
+                console.log(this.spaceship.health)
+                this.healthBars[this.spaceship.health].alpha = 1;
+                this.healthBars[this.spaceship.health].setTint(0xFF0000);
+                this.invencibilidad1 = true;
             }
             ship.a += 1;
         }
@@ -394,7 +393,7 @@ class SCNplayLevel extends Phaser.Scene {
     createTarget(pointer, target) {
         if (target.alpha === 0.9) {
             this.music.pause();
-            this.scene.launch('pauseShop')
+            this.scene.launch('pauseShop');
             this.scene.pause();
         } else {
             this.target = target;
