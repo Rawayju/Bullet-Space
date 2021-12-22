@@ -12,6 +12,7 @@ class SCNendLevel extends Phaser.Scene {
         this.fadeout = this.add.sprite(config.width / 2,config.height / 2,"fadeout").setScale(500).setBlendMode(Phaser.BlendModes.MULTIPLY);
         this.fadeout.depth = 99;
         this.fadeout.play("fadeout", true);
+        this.cursors = this.input.keyboard.createCursorKeys();
 
         var text = this.add.rexTextPlayer(
             {
@@ -142,5 +143,16 @@ class SCNendLevel extends Phaser.Scene {
         });
 
         this.background.ewe = 0;
+    }
+
+    update() {
+        if (this.background.ewe > 3500) {
+            this.scene.start("credits");
+        } else {
+            this.background.ewe += 1;
+        }
+        if (this.cursors.shift.isDown) {
+            this.scene.start("credits");   
+        }
     }
 }

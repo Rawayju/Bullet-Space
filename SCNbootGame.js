@@ -63,6 +63,10 @@ class SCNbootGame extends Phaser.Scene {
         this.load.image("health0", "assets/Images/Sprites/Health/health0.png");
         this.load.image("healthStrike", "assets/Images/Sprites/Health/healthStrike.png");
 
+        this.load.image("creditsPlay", "assets/Images/Sprites/creditsPlay.png");
+        this.load.image("creditsCosmos", "assets/Images/Sprites/creditsCosmos.png");
+        this.load.image("creditsWords", "assets/Images/Sprites/creditsWords.png");
+        this.load.image("credits", "assets/Images/Sprites/credits.png");
         this.load.image("click", "assets/Images/Sprites/click.png");
         this.load.image("introduction", "assets/Images/Sprites/introduction.png");
         this.load.image("titleScreen", "assets/Images/Sprites/titleScreen.png");
