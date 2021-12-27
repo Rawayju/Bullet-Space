@@ -81,7 +81,8 @@ The shop stores all the values *(like money, damage and firerate bought)* into g
 ### phaser.min.js
 is the file needed for Phaser 3 to do its magic.
 
-*(for the .7z including the excecutable version, not GitHub version as I was unable to figure out how to upload heavy files due to deadline)*
+
+*(for the .7z including the excecutable version, not GitHub version as I was unable to figure out how to upload heavy files due to deadline:)*
 ### Index and package.json
 and other files tell **Electron** the information it needs to run this HTML5 game in the form of a .exe file.
 
