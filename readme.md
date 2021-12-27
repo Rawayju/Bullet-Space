@@ -9,7 +9,7 @@ You play as ***Spacen***, a girl that's ready to confront her daunting first day
 ![Spacen's character portrait](https://i.ibb.co/R3Tvb9b/Spacen-Animsa.gif)
 *-Made use of game assets I created long ago for this day-*
 
-Two months in the making, **BulletSpace** was made with love with the objective in mind of being a difficult survival type of game. As one, tt has no clear end, but you shall consider yourself rather skillful in the event that you manage to buy all upgrades from the shop without breaking your ship first. Set yourself tiny goals and get better at it with each try.
+Two months in the making, **BulletSpace** was made with love with the objective in mind of being a difficult survival type of game. As one, it has no clear end, but you shall consider yourself rather skillful in the event that you manage to buy all upgrades from the shop without breaking your ship first. Set yourself tiny goals and get better at it with each try.
 
 ![Space animation](https://i.ibb.co/7W04BRX/Space-help-sprite-sheet.gif)
 
