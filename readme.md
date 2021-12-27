@@ -77,6 +77,12 @@ The store at the pause screen where players have the option to buy upgrades with
 Spend your money wisely! Each upgrades significantly makes things easier, but they get pretty costy pretty soon.
 
 The shop stores all the values *(like money, damage and firerate bought)* into global variables set on ***game.js*** at the start of the game. From there, ***SCNplayLevel.js*** can easily acess them.
+  
+### SCNendLevel.js:
+Once you run out of lives in ***SCNplayLevel***, a game over cutscene will start playing showing Spacen reflecting over her first day at work. Then, the credit screen pops up.
+  
+### SCNcredits.js:
+Credits screen! It also showcases your total score made by tearing apart asteroids and collecting gems. Try to beat you presonal best!
 
 ### phaser.min.js
 is the file needed for Phaser 3 to do its magic.
