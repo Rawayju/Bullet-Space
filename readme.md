@@ -4,12 +4,12 @@
 
 ![Title logo](https://i.ibb.co/D1nKwvv/title.png)
 
-You play as Spacen, a girl that's ready to confront her daunting first day at work as a "space debris deviator." As such, she will keep her planet safe and sound from any potential dangerous asteroids as they stray away from their orbits. Get on your debris-destroyer spaceship, survive as much time as you can, and power it up as you collect gems in this thrilling adventure!
+You play as ***Spacen***, a girl that's ready to confront her daunting first day at work as a "space debris deviator." As such, she will keep her planet safe and sound from any potential dangerous asteroids as they stray away from their orbits. Get on your debris-destroyer spaceship, survive as much time as you can, and power it up as you collect gems in this thrilling adventure!
 
 ![Spacen's character portrait](https://i.ibb.co/R3Tvb9b/Spacen-Animsa.gif)
--Made use of game assets I created long ago for this day-
+*-Made use of game assets I created long ago for this day-*
 
-Two months in the making, BulletSpace was made with love with the objective in mind of being a difficult survival type of game. As one, tt has no clear end, but you shall consider yourself rather skillful in the event that you manage to buy all upgrades from the shop without breaking your ship first. Set yourself tiny goals and get better at it with each try.
+Two months in the making, **BulletSpace** was made with love with the objective in mind of being a difficult survival type of game. As one, tt has no clear end, but you shall consider yourself rather skillful in the event that you manage to buy all upgrades from the shop without breaking your ship first. Set yourself tiny goals and get better at it with each try.
 
 ![Space animation](https://i.ibb.co/7W04BRX/Space-help-sprite-sheet.gif)
 
@@ -78,11 +78,12 @@ Spend your money wisely! Each upgrades significantly makes things easier, but th
 
 The shop stores all the values *(like money, damage and firerate bought)* into global variables set on ***game.js*** at the start of the game. From there, ***SCNplayLevel.js*** can easily acess them.
 
-### Index and package.json
-and other files tell **Electron** the information it needs to run this HTML5 game in the form of a .exe file.
-
 ### phaser.min.js
 is the file needed for Phaser 3 to do its magic.
+
+*(for the .7z including the excecutable version, not GitHub version as I was unable to figure out how to upload heavy files due to deadline)*
+### Index and package.json
+and other files tell **Electron** the information it needs to run this HTML5 game in the form of a .exe file.
 
 ### The rest of files are part of Electron, except for the "assets" folder where I stored all of the images, sounds, etc. that I needed in order to fully flesh out this game.
 
