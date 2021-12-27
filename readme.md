@@ -2,16 +2,16 @@
 #### Video Demo:  <Placeholder>
 #### Description: A pixel-y, survival, bullet-hell videogame coded with JavaScript and HTML using the Phaser Game Framework and packed into an excecutable file with Electron. 
 
-![Spacen's character portrait](https://ibb.co/JcPkrGG)
+![Title logo](https://i.ibb.co/D1nKwvv/title.png)
 
 You play as Spacen, a girl that's ready to confront her daunting first day at work as a "space debris deviator." As such, she will keep her planet safe and sound from any potential dangerous asteroids as they stray away from their orbits. Get on your debris-destroyer spaceship, survive as much time as you can, and power it up as you collect gems in this thrilling adventure!
 
-![Spacen's character portrait](https://ibb.co/7ntYCXC)
+![Spacen's character portrait](https://i.ibb.co/R3Tvb9b/Spacen-Animsa.gif)
 -Made use of game assets I created long ago for this day-
 
 Two months in the making, BulletSpace was made with love with the objective in mind of being a difficult survival type of game. As one, tt has no clear end, but you shall consider yourself rather skillful in the event that you manage to buy all upgrades from the shop without breaking your ship first. Set yourself tiny goals and get better at it with each try.
 
-![Spacen animation](https://ibb.co/WyRt7P6)
+![Space animation](https://i.ibb.co/7W04BRX/Space-help-sprite-sheet.gif)
 
 The game consists of 7 scenes and 6 main scripts *(located in BulletSpace > game > resources > app)*. I shall now explain each of their purposes for this game:
 
@@ -72,7 +72,7 @@ The file is divided into many functions as to orderly make sense of it. Those ar
 ### PauseShop.js:
 The store at the pause screen where players have the option to buy upgrades with the money they have gathered so far. Here, they can up their damage to a single class of asteroid, they can boost their firerate, the speed at which bullets go, or restore their health. There are also DPS bonuses you get from holding the SHIFT key in exchange of speed, and you can also buy upgrades to take the most out of it; those are the firerate boost and the damage to all types of asteroids boost.
 
-![Pause screen image](https://ibb.co/S0bcJBD)
+![Pause screen image](https://i.ibb.co/926hGWm/pause-screen.png)
 
 Spend your money wisely! Each upgrades significantly makes things easier, but they get pretty costy pretty soon.
 
