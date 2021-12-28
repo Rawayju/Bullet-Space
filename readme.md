@@ -1,6 +1,6 @@
 # BulletSpace
-#### Video Demo:  <Placeholder>
-#### Description: A pixel-y, survival, bullet-hell videogame coded with JavaScript and HTML using the Phaser Game Framework and packed into an excecutable file with Electron. 
+#### Video Demo:  https://youtu.be/yjHlWezAMiY
+#### Description: A pixel-y, survival, bullet-hell videogame coded with JavaScript and HTML using the Phaser Game Framework and packed into an executable file with Electron. 
 
 ![Title logo](https://i.ibb.co/D1nKwvv/title.png)
 
@@ -9,7 +9,7 @@ You play as ***Spacen***, a girl that's ready to confront her daunting first day
 ![Spacen's character portrait](https://i.ibb.co/R3Tvb9b/Spacen-Animsa.gif)
 *-Made use of game assets I created long ago for this day-*
 
-Two months in the making, **BulletSpace** was made with love with the objective in mind of being a difficult survival type of game. As one, it has no clear end, but you shall consider yourself rather skillful in the event that you manage to buy all upgrades from the shop without breaking your ship first. Set yourself tiny goals and get better at it with each try.
+Two months in the making, **BulletSpace** was made with love with the objective in mind of being a difficult survival type of game. As one, it has no clear end, but you shall consider yourself rather skilful in the event that you manage to buy all upgrades from the shop without breaking your ship first. Set yourself tiny goals and get better at it with each try.
 
 ![Space animation](https://i.ibb.co/7W04BRX/Space-help-sprite-sheet.gif)
 
@@ -88,7 +88,7 @@ Credits screen! It also showcases your total score made by tearing apart asteroi
 is the file needed for Phaser 3 to do its magic.
 
 
-*(for the .7z including the excecutable version, not GitHub version as I was unable to figure out how to upload heavy files due to deadline:)*
+*(for the .7z including the executable version, not GitHub version as I was unable to figure out how to upload heavy files due to deadline:)*
 ### Index and package.json
 and other files tell **Electron** the information it needs to run this HTML5 game in the form of a .exe file.
 
